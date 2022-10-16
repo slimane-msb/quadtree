@@ -335,6 +335,40 @@ int sfNDARPK(Liste l, int k, int* posInv){
 
 
 
+/*************************************************/
+/*                                               */
+/*           Main                                */
+/*                                               */
+/*************************************************/
+
+
+/* rec sans sous fonction*/
+
+Liste FctBegayessf(Liste l){
+    if (estVide(l)) return l;
+    // sinon
+    if (premier(l)<0) return  FctBegayessf(suite(l));
+    return ajoute(premier(l),ajoute(premier(l),FctBegayessf(suite(l))));
+}
+
+
+/* rec terminal  */
+/*
+    - init new list 
+    - la passer en pointeur 
+    - echanger les pointeur 
+    - renvoyer cette liste a la fin 
+*/
+// Liste FctBegayeT(Liste l, Liste r, Liste* pfin){
+//     if (estVide(l)) return r;
+//     // sinon
+//     if (premier(l)<0) return  FctBegayeT(suite(l),r,pfin);
+//     else {
+//         *pfin->suivant = l;
+//         pfin = l; 
+//         return FctBegayeT(suite(l),r,pfin)
+//     }
+// }
 
 
 

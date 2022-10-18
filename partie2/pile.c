@@ -406,6 +406,37 @@ Liste FctBegayeI (Liste l){
 
 
 
+/*************************************************/
+/*                                               */
+/*           ProcBegaye                          */
+/*                                               */
+/*************************************************/
+
+Liste ProcBegayeT(Liste l){
+    Bloc* d = l; // pointeur vers le bloc avant le bloc pointe' par l;
+    ProcBegayeTbis(l, d);
+    return (Liste)d;
+
+}
+void ProcBegayeTbis(Liste l, Bloc* d){
+    if (estVide(l)) return;
+    // sinon
+    if (premier(l)<0) { // virer p(l)        
+        d->suivant = l->suivant;
+        free(l); // free bloc qui contient p(l)<0
+        ProcBegayeTbis(d->suivant,d);
+    }else {
+        Bloc* dup = malloc(sizeof(Bloc)) ;
+        dup->nombre = premier(l) ;
+        dup->suivant = l->suivant;
+        l->suivant = dup;
+        ProcBegayeTbis(dup->suivant,dup);
+    }
+}
+
+
+
+
 
 /*************************************************/
 /*                                               */

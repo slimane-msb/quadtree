@@ -1,4 +1,4 @@
-
+// todo: recopier les signature avant toutes les fonctions 
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -337,7 +337,7 @@ int sfNDARPK(Liste l, int k, int* posInv){
 
 /*************************************************/
 /*                                               */
-/*           Main                                */
+/*           FctBegaye                           */
 /*                                               */
 /*************************************************/
 
@@ -351,26 +351,56 @@ Liste FctBegayessf(Liste l){
     return ajoute(premier(l),ajoute(premier(l),FctBegayessf(suite(l))));
 }
 
+/* rec terminal */
 
-/* rec terminal  */
+
 /*
-    - init new list 
-    - la passer en pointeur 
-    - echanger les pointeur 
-    - renvoyer cette liste a la fin 
+    lf : pointeur vers le dernier bloc 
+    l  : pointeur vers le premier bloc 
 */
-// Liste FctBegayeT(Liste l, Liste r, Liste* pfin){
-//     if (estVide(l)) return r;
-//     // sinon
-//     if (premier(l)<0) return  FctBegayeT(suite(l),r,pfin);
-//     else {
-//         *pfin->suivant = l;
-//         pfin = l; 
-//         return FctBegayeT(suite(l),r,pfin)
-//     }
-// }
+Liste FctBegayeT(Liste l){
+    Liste r;
+    Liste lf; 
+    return FctBegayeTbis(l, r,  lf);
+
+}
+Liste FctBegayeTbis(Liste l, Liste r, Liste pfin){
+    if (estVide(l)) return r;
+    // sinon
+    if (premier(l)<0) return  FctBegayeTbis(suite(l),r,pfin);
+    else {
+        ajouteFin(premier(l),pfin);
+        ajouteFin(premier(l),pfin); // car deux fois
+        return FctBegayeTbis(suite(l),r,pfin);
+    }
+}
+
+/*ajouter un element a la fin, avec fl : pointeur vers le dernier bloc */
+Liste ajouteFin(int x, Liste fl)
+{
+    Liste tmp = (Liste) malloc(sizeof(Bloc)) ;
+    tmp->nombre = x ;
+    tmp->suivant = NULL;
+    fl->suivant = tmp;
+    return tmp ;
+}
 
 
+/* iteratif: */
+
+
+Liste FctBegayeI (Liste l){
+    Liste r;
+    Liste lf; // pointeur vers la fin de r
+    while (NOT estVide(l)){
+        if (premier(l)>=0) {
+            ajouteFin(premier(l), lf);
+            ajouteFin(premier(l), lf);
+        }
+        l = suite(l);
+    }
+    return r;
+}
 
 
 

@@ -32,15 +32,6 @@ typedef struct Bloc
 typedef Bloc *Liste ;
 
 
-// typedef struct BlocD
-// {
-//     int nombre;
-//     struct BlocD *suivant;
-//     struct BlocD *pred;
-// } BlocD;
-
-// typedef BlocD *ListesBis ;
-
 typedef struct BlocListe
 {
     Liste list;

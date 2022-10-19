@@ -26,9 +26,28 @@ typedef struct Bloc
 {
     int nombre;
     struct Bloc *suivant;
+    struct Bloc *pred; // a utiliser que pour la dernier question 
 } Bloc;
 
 typedef Bloc *Liste ;
+
+
+// typedef struct BlocD
+// {
+//     int nombre;
+//     struct BlocD *suivant;
+//     struct BlocD *pred;
+// } BlocD;
+
+// typedef BlocD *ListesBis ;
+
+typedef struct BlocListe
+{
+    Liste list;
+    struct BlocListe *suivant;
+} BlocListe;
+
+typedef BlocListe *ListeListe ;
 
 /*************************************************/
 /*                                               */
@@ -98,6 +117,14 @@ Liste ajoute(int x, Liste l)
 {
     Liste tmp = (Liste) malloc(sizeof(Bloc)) ;
     tmp->nombre = x ;
+    tmp->suivant = l ;
+    return tmp ;
+}
+
+ListeListe ajoutell(Liste x, ListeListe l)
+{
+    ListeListe tmp = (ListeListe) malloc(sizeof(BlocListe)) ;
+    tmp->list = x ;
     tmp->suivant = l ;
     return tmp ;
 }
@@ -418,6 +445,7 @@ Liste ProcBegayeT(Liste l){
     return (Liste)d;
 
 }
+// just peut etre il faut faire quelque cast List() mais gcc 
 void ProcBegayeTbis(Liste l, Bloc* d){
     if (estVide(l)) return;
     // sinon
@@ -433,6 +461,77 @@ void ProcBegayeTbis(Liste l, Bloc* d){
         ProcBegayeTbis(dup->suivant,dup);
     }
 }
+
+
+
+
+/*************************************************/
+/*                                               */
+/*           Permutations                        */
+/*                                               */
+/*************************************************/
+
+ListeListe permutation (int n){
+    if (n==0){
+        ListeListe ll;
+        return ll;
+    }else{
+        return ATLTP(n, permutation(n-1));
+    }
+}
+
+
+Liste ATLTP(int n, ListeListe ll){
+    if (ll == NULL){
+        Liste l;
+        return l; // peut-on faire return (Liste)NULL; ? 
+    }else{
+        return concat(ATP(n, ll->list), ATLTP(n, ll->suivant));
+    }
+}
+
+Liste concat(Liste l1, Liste l2){
+    if (estVide(l1)) return l2;
+    else return ajoute(premier(l1),concat(suite(l1),l2));
+}
+
+ListeListe ATP (int n, Liste l){
+    if (estVide(l)) {
+        ajoute(n,l);
+        ListeListe ll;
+        return ajoutell(l,ll);
+    } else return ajoutell(ajoute(n,l),AETTL(premier(l),ATP(n,suite(l))));
+}
+
+ListeListe AETTL (int n, ListeListe ll){
+    if (ll==NULL) return ll;
+    else return ajoutell(ajoute(n,ll->list),AETTL(n,ll->suivant));
+}
+
+
+
+/*************************************************/
+/*                                               */
+/*           retire                              */
+/*                                               */
+/*************************************************/
+
+void retir (Liste l, Bloc* p){
+    if (estVide(l)) return;
+    else {
+        if (l->pred==p){
+            l->suivant->pred = l->pred;
+            l->pred->suivant = l->suivant;
+            free(l);
+            return;
+        }else{
+            retir(suite(l),p);
+        }
+    }
+}
+
+
+
 
 
 

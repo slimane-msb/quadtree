@@ -263,12 +263,15 @@ bool ZeroEnPositionUnOuDeuxOuTrois(Liste l){
 /*                                               */
 /*************************************************/
 
-bool Pluscourte(Liste l1, Liste l2){
-    if (estVide(l2)) return FALSE;
-    if (estVide(l1)) return TRUE;
-    return Pluscourte(suite(l1),suite(l2));
+bool PlusCourte(Liste l1, Liste l2){
+    if (estVide(l1) )
+        return NOT estVide(l2);
+    else if (estVide(l2))
+        return FALSE;
+    else
+        return PlusCourte(suite(l1),suite(l2));
+    
 }
-
 
 
 /*************************************************/
@@ -277,12 +280,13 @@ bool Pluscourte(Liste l1, Liste l2){
 /*                                               */
 /*************************************************/
 /*rec non terminal*/
-int NombreDe0AvantPositionKnt(Liste l, int k){
-    if (estVide(l) OR k==0) return 0;
-    if (premier(l)==0) return 1+NombreDe0AvantPositionKnt(suite(l),k-1);
-    return NombreDe0AvantPositionKnt(suite(l),k-1);
+int NombreDe0AvantPositionKRec(Liste L, int K){
+    if (estVide(L) || K <= 0)
+        return 0;
+    else if (premier(L) == 0){
+        return 1 + NombreDe0AvantPositionKRec(suite(L), K-1);
+    }
 }
-
 /*rec sous fonction terminal */
 int NombreDe0AvantPositionKsf(Liste l, int k){
     return sfNDAPK(l,k,0);
@@ -362,66 +366,63 @@ int sfNDARPK(Liste l, int k, int* posInv){
 
 /* rec sans sous fonction*/
 
-Liste FctBegayessf(Liste l){
-    if (estVide(l)) return l;
-    // sinon
-    if (premier(l)<0) return  FctBegayessf(suite(l));
-    return ajoute(premier(l),ajoute(premier(l),FctBegayessf(suite(l))));
+Liste FctBegayeSimple(Liste l){
+    if (l == NULL)
+        return l;
+    else{
+        if (premier(l) > 0 ){
+            return ajoute(premier(l),ajoute(premier(l), FctBegayeSimple(suite(l))));
+        }
+        else
+            return FctBegayeSimple(suite(l));
+    }
 }
 
 /* rec terminal */
 
-
-/*
-    lf : pointeur vers le dernier bloc 
-    l  : pointeur vers le premier bloc 
-*/
-Liste FctBegayeT(Liste l){
-    Liste r;
-    Liste lf; 
-    return FctBegayeTbis(l, r,  lf);
-
-}
-Liste FctBegayeTbis(Liste l, Liste r, Liste pfin){
-    if (estVide(l)) return r;
-    // sinon
-    if (premier(l)<0) return  FctBegayeTbis(suite(l),r,pfin);
-    else {
-        ajouteFin(premier(l),pfin);
-        ajouteFin(premier(l),pfin); // car deux fois
-        return FctBegayeTbis(suite(l),r,pfin);
+void FctBegayeTermBis(Liste l, Liste* res){
+    if (l != NULL){
+        if (premier(l) > 0){
+            empile(premier(l), res);
+            res = &((**res).suivant);
+            empile(premier(l), res);
+            res = &((**res).suivant);
+        }
+        FctBegayeTermBis(suite(l),res);
     }
+
 }
 
-/*ajouter un element a la fin, avec fl : pointeur vers le dernier bloc */
-Liste ajouteFin(int x, Liste fl)
-{
-    Liste tmp = (Liste) malloc(sizeof(Bloc)) ;
-    tmp->nombre = x ;
-    tmp->suivant = NULL;
-    fl->suivant = tmp;
-    return tmp ;
+Liste FctBegayeTerm(Liste l){
+    Liste res;
+    initVide(&res);
+    FctBegayeTermBis(l, &res);
+    return res;
 }
+
 
 
 /* iteratif: */
 
-
-Liste FctBegayeI (Liste l){
-    Liste r;
-    Liste lf; // pointeur vers la fin de r
-    while (NOT estVide(l)){
-        if (premier(l)>=0) {
-            ajouteFin(premier(l), lf);
-            ajouteFin(premier(l), lf);
+Liste FctBegayeIter(Liste l){
+    Liste res ;
+    initVide(&res);
+    Liste *tmp = &res;
+    Liste p = l;
+    while(p != NULL){
+        if (premier(p) > 0 ){
+            empile(premier(p), tmp);
+            tmp = &((**tmp).suivant);
+            empile(premier(p), tmp);
+            tmp = &((**tmp).suivant);
+            
         }
-        l = suite(l);
+        p = suite(p);    
     }
-    return r;
+    free(*tmp);
+    free(p);
+    return res;
 }
-
-
-
 
 
 /*************************************************/
@@ -430,29 +431,19 @@ Liste FctBegayeI (Liste l){
 /*                                               */
 /*************************************************/
 
-Liste ProcBegayeT(Liste l){
-    Bloc* d = l; // pointeur vers le bloc avant le bloc pointe' par l;
-    ProcBegayeTbis(l, d);
-    return (Liste)d;
-
-}
-// just peut etre il faut faire quelque cast List() mais gcc 
-void ProcBegayeTbis(Liste l, Bloc* d){
-    if (estVide(l)) return;
-    // sinon
-    if (premier(l)<0) { // virer p(l)        
-        d->suivant = l->suivant;
-        free(l); // free bloc qui contient p(l)<0
-        ProcBegayeTbis(d->suivant,d);
-    }else {
-        Bloc* dup = malloc(sizeof(Bloc)) ;
-        dup->nombre = premier(l) ;
-        dup->suivant = l->suivant;
-        l->suivant = dup;
-        ProcBegayeTbis(dup->suivant,dup);
+void ProcBegaye(Liste *L){
+    if (*L != NULL){
+        if (premier(*L) <= 0 ){
+            depile(L);
+        } 
+        else if (premier(*L) > 0){
+            empile(premier(*L),L);
+            L = &((**L).suivant);
+            L = &((**L).suivant);    
+        } 
+        ProcBegaye(L);;
     }
 }
-
 
 
 

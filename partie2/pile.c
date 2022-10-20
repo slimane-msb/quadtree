@@ -288,43 +288,53 @@ int NombreDe0AvantPositionKRec(Liste L, int K){
     }
 }
 /*rec sous fonction terminal */
-int NombreDe0AvantPositionKsf(Liste l, int k){
-    return sfNDAPK(l,k,0);
+int NombreDe0AvantPositionKRecTermBis(Liste L, int K, int res){
+  
+    if (estVide(L) || K <= 0)
+        return res;
+    else if (premier(L) == 0){
+        return NombreDe0AvantPositionKRecTermBis(suite(L), K-1, ++res);
+    }
+    return NombreDe0AvantPositionKRecTermBis(suite(L), K-1, res);
 }
 
-int sfNDAPK(Liste l, int k, int r){
-    if (estVide(l) OR k==0) return r;
-    if (premier(l)==0) return sfNDAPK(suite(l),k-1,r+1);
-    return sfNDAPK(suite(l),k-1,r);
+
+int NombreDe0AvantPositionKRecTerm(Liste L, int K){
+  
+    return NombreDe0AvantPositionKRecTermBis(L, K, 0);
 }
 
 
 /*rec sous procedure terminal */
-int NombreDe0AvantPositionKsp(Liste l, int k){
-    int r=0;
-    spNDAPK(l,k,&r);
-    return r;
+void NombreDe0AvantPositionKRecTermProcBis(Liste *L, int K, int *res){
+    if (*L != NULL && K > 0){
+        if (premier(*L) == 0 ) then
+            ++*res;
+        depile(L);
+        NombreDe0AvantPositionKRecTermProcBis(L, --K, res);
+    }
 }
 
-void spNDAPK(Liste l, int k, int* r){
-    if (estVide(l) OR k==0) return;
-    if (premier(l)==0) {
-        *r = *r+1;
-        spNDAPK(suite(l),k-1,r);
-    } else spNDAPK(suite(l),k-1,r);
+int NombreDe0AvantPositionKRecTermProc(Liste L, int K){
+
+    int res = 0;
+    NombreDe0AvantPositionKRecTermProcBis(&L, K, &res);
+    return res; 
 }
+
 
 /* iteratif*/
-int NombreDe0AvantPositionKi(Liste l, int k){
-    int r=0;
-    while (l ISNOT NULL AND k!=0)
+int NombreDe0AvantPositionKIter(Liste L, int K){
+    int res = 0;
+    while (!(estVide(L) || K <= 0))
     {
-        if (premier(l)==0) r++;
-        k--;
-        l = suite(l); 
+        if (premier(L) == 0)
+            res ++;
+        L = suite(L);
+        K--;
     }
-    return r;
-}
+    return res;;
+} 
 
 
 
@@ -336,22 +346,23 @@ int NombreDe0AvantPositionKi(Liste l, int k){
 /*************************************************/
 
 /*rec sous fonction non terminal - une seul passe */
-int NombreDe0ApresRetroPositionK(Liste l, int k){
-    if (k==0) return 0; // car si k=0 on fera pas le parcours de l'annaire de paris pour just renvoyer 0
-    int posInv;
-    return sfNDARPK(l,k,&posInv);
-}
-
-int sfNDARPK(Liste l, int k, int* posInv){
-    if (estVide(l)) {
-        *posInv=k; 
-        return 0;
+void NombreDe0ApresRetroPositionKBis(Liste L,int* K,int* res){
+    
+    if (L != NULL) {
+        NombreDe0ApresRetroPositionKBis(suite(L), K ,res);
+        if (*K > 0  && premier(L) == 0 )
+            ++*res;
+        --*K;
     }
-    // sinon
-    int r = sfNDARPK(suite(l),k,posInv);
-    *posInv=*posInv-1;
-    if (*posInv==0) return r;
-    if (premier(l)==0) return r++;
+
+    
+} 
+
+
+int NombreDe0ApresRetroPositionK(Liste L,int K){
+    int res = 0;
+    NombreDe0ApresRetroPositionKBis(L,&K, &res);
+    return res;
 }
 
 
@@ -453,15 +464,21 @@ void ProcBegaye(Liste *L){
 /*                                               */
 /*************************************************/
 
-ListeListe permutation (int n){
-    if (n==0){
-        ListeListe ll;
-        return ll;
-    }else{
-        return ATLTP(n, permutation(n-1));
-    }
+
+
+
+ListeListe AETTL (int n, ListeListe ll){
+    if (ll==NULL) return ll;
+    else return ajoutell(ajoute(n,ll->list),AETTL(n,ll->suivant));
 }
 
+ListeListe ATP (int n, Liste l){
+    if (estVide(l)) {
+        ajoute(n,l);
+        ListeListe ll;
+        return ajoutell(l,ll);
+    } else return ajoutell(ajoute(n,l),AETTL(premier(l),ATP(n,suite(l))));
+}
 
 Liste ATLTP(int n, ListeListe ll){
     if (ll == NULL){
@@ -477,18 +494,16 @@ Liste concat(Liste l1, Liste l2){
     else return ajoute(premier(l1),concat(suite(l1),l2));
 }
 
-ListeListe ATP (int n, Liste l){
-    if (estVide(l)) {
-        ajoute(n,l);
+
+ListeListe permutation (int n){
+    if (n==0){
         ListeListe ll;
-        return ajoutell(l,ll);
-    } else return ajoutell(ajoute(n,l),AETTL(premier(l),ATP(n,suite(l))));
+        return ll;
+    }else{
+        return ATLTP(n, permutation(n-1));
+    }
 }
 
-ListeListe AETTL (int n, ListeListe ll){
-    if (ll==NULL) return ll;
-    else return ajoutell(ajoute(n,ll->list),AETTL(n,ll->suivant));
-}
 
 
 
@@ -498,7 +513,8 @@ ListeListe AETTL (int n, ListeListe ll){
 /*                                               */
 /*************************************************/
 
-void retir (Liste l, Bloc* p){
+
+void retire (Liste l, Bloc* p){
     if (estVide(l)) return;
     else {
         if (l->pred==p){
@@ -507,7 +523,7 @@ void retir (Liste l, Bloc* p){
             free(l);
             return;
         }else{
-            retir(suite(l),p);
+            retire(suite(l),p);
         }
     }
 }

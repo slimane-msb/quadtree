@@ -263,14 +263,10 @@ bool ZeroEnPositionUnOuDeuxOuTrois(Liste l){
 /*                                               */
 /*************************************************/
 
-bool PlusCourte(Liste l1, Liste l2){
-    if (estVide(l1) )
-        return NOT estVide(l2);
-    else if (estVide(l2))
-        return FALSE;
-    else
-        return PlusCourte(suite(l1),suite(l2));
-    
+bool Pluscourte(Liste l1, Liste l2){
+    if (estVide(l2)) return FALSE;
+    if (estVide(l1)) return TRUE;
+    return Pluscourte(suite(l1),suite(l2));
 }
 
 

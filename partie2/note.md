@@ -16,7 +16,7 @@ Xn : Avec sous-proc : n'est pas RT (%done )
 
 ZPUDT
 
-PC LD0 : test lourd (si L1, si L2)
+PC LD0 : test lourd (si L1, si L2)  (% done)
 
 NZAVPK rec : il manque un else ... FOnctions : vérifiez que vous avez bien autant de else que de if. Si un else manque, vous devez savoir pourquoi.
 NZAVPK it

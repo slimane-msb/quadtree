@@ -56,14 +56,14 @@ double xsf(int n){
 
 // avec sous procedure 
 void spx(int n, double* x){
-    if (n==0) *x=1;
+    if (n==0) *x;
     else{
-        spx(n-1, x);
         *x = *x+2/(*x);
+        spx(n-1, x);
     }
 }
 double xsp(int n){
-    double x;
+    double x=1;
     spx(n,&x);
     return x;
 } 

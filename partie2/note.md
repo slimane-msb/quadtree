@@ -12,7 +12,7 @@ P2a, n<0 ne va pas marcher (% done: power2abis)
 
 Ack
 
-Xn : Avec sous-proc : n'est pas RT
+Xn : Avec sous-proc : n'est pas RT (%done )
 
 ZPUDT
 

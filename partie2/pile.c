@@ -284,32 +284,28 @@ int NombreDe0AvantPositionKRec(Liste L, int K){
 
 /*rec sous fonction terminal */
 int NombreDe0AvantPositionKRecTermBis(Liste L, int K, int res){
-  
     if (estVide(L) || K <= 0) return res;
     else if (premier(L) == 0) return NombreDe0AvantPositionKRecTermBis(suite(L), K-1, (res+1));
     else return NombreDe0AvantPositionKRecTermBis(suite(L), K-1, res);
 }
-
-
 int NombreDe0AvantPositionKRecTerm(Liste L, int K){
     return NombreDe0AvantPositionKRecTermBis(L, K, 0);
 }
 
 
 /*rec sous procedure terminal */
-void NombreDe0AvantPositionKRecTermProcBis(Liste *L, int K, int *res){
-    if (*L != NULL && K > 0){
-        if (premier(*L) == 0 ) then
-            ++*res;
-        depile(L);
-        NombreDe0AvantPositionKRecTermProcBis(L, --K, res);
+void NombreDe0AvantPositionKRecTermProcBis(Liste L, int K, int *res){
+    if (!(estVide(L) || K <= 0)){
+        if (premier(L) == 0){
+            *res+=1;
+            NombreDe0AvantPositionKRecTermBis(suite(L), K-1, res);
+        }
+        else NombreDe0AvantPositionKRecTermBis(suite(L), K-1, res);
     }
 }
-
 int NombreDe0AvantPositionKRecTermProc(Liste L, int K){
-
     int res = 0;
-    NombreDe0AvantPositionKRecTermProcBis(&L, K, &res);
+    NombreDe0AvantPositionKRecTermProcBis(L, K, &res);
     return res; 
 }
 

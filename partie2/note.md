@@ -24,9 +24,9 @@ NZAVPK it
 
 NZAVPK SF ldB++  rec(in j++) j++ c'est l'instruction j=j+1. Utilisez j+1 ici (%done)
 
-plus structuré avec un "else"
+plus structuré avec un "else" (%done)
 
-NZAVPK SP    BUG D : Depile au lieu de Suite, ce qui détruit la liste.
+NZAVPK SP    BUG D : Depile au lieu de Suite, ce qui détruit la liste. (% done)
     Pour accéder à la deuxième page d'un livre,
     vous arrachez et jetez la page 1 (depile(&l)) au lieu de la tourner (l=suite(l))
 

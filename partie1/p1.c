@@ -121,6 +121,15 @@ void afficheSuiteEn(){
 /**********************************************************************************************/
 // 10 version de power : 
 
+// version 1 :
+
+int power1(int x, int n){
+    if (n==0) return 1; 
+    else return (power1(x,n-1)*x); 
+}
+
+// version 1 bis : 
+
 // avec n pos || neg 
 double power1bis(int x, int n){
     if (n==0) return 1.0; 
@@ -141,6 +150,19 @@ double power1neg(int x, int n){
     return (power1bis(x,n+1)*(1.0/x));
 }
 
+// se passer de coder P1neg
+double power1bisc(int x, int n){
+    if (n>=0) return (double)power1(x,n);
+    return (double)1/power1(x,-n);
+} 
+
+
+int power2a (int x, int n){
+    int r = 1; 
+    int i; 
+    for (i=1; i<n+1; i++) r=r*x; 
+    return r;
+} 
 
 
 double power2abis (int x, int n){
@@ -151,20 +173,6 @@ double power2abis (int x, int n){
     return r;
 } 
 
-
-
-
-int power1(int x, int n){
-    if (n==0) return 1; 
-    else return (power1(x,n-1)*x); 
-}
-
-int power2a (int x, int n){
-    int r = 1; 
-    int i; 
-    for (i=1; i<n+1; i++) r=r*x; 
-    return r;
-} 
 
 
 int power2b (int x, int n){

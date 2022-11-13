@@ -266,7 +266,7 @@ bool ZeroEnPositionUnOuDeuxOuTrois(Liste l){
 bool Pluscourte(Liste l1, Liste l2){
     if (estVide(l2)) return FALSE;
     if (estVide(l1)) return TRUE;
-    return Pluscourte(suite(l1),suite(l2));
+    else return Pluscourte(suite(l1),suite(l2));
 }
 
 
@@ -279,7 +279,7 @@ bool Pluscourte(Liste l1, Liste l2){
 int NombreDe0AvantPositionKRec(Liste L, int K){
     if (estVide(L) || K <= 0) return 0;
     if (premier(L) == 0) return 1 + NombreDe0AvantPositionKRec(suite(L), K-1);
-    return NombreDe0AvantPositionKRec(suite(L), K-1);
+    else return NombreDe0AvantPositionKRec(suite(L), K-1);
 }
 
 /*rec sous fonction terminal */
@@ -287,7 +287,7 @@ int NombreDe0AvantPositionKRecTermBis(Liste L, int K, int res){
   
     if (estVide(L) || K <= 0) return res;
     else if (premier(L) == 0) return NombreDe0AvantPositionKRecTermBis(suite(L), K-1, (res+1));
-    return NombreDe0AvantPositionKRecTermBis(suite(L), K-1, res);
+    else return NombreDe0AvantPositionKRecTermBis(suite(L), K-1, res);
 }
 
 

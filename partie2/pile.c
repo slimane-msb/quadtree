@@ -167,6 +167,18 @@ void affiche_iter(Liste l)
     printf("\n");
 }
 
+
+void affiche_recLL(ListeListe ll)
+{
+    if(ll=NULL)
+        printf("\n");
+    else
+    {
+        affiche_rec(ll->list);
+        affiche_recLL(ll->suivant);
+    }
+}
+
 /*************************************************/
 /*                                               */
 /*     Longueur, sans les briques de base        */
@@ -252,9 +264,15 @@ void VideListe(Liste *L)
 
 /*compilation paresseuse */
 bool ZeroEnPositionUnOuDeuxOuTrois(Liste l){
-    return (l ISNOT NULL)AND(premier(l)==0 OR 
-                (suite(l) ISNOT NULL AND (premier(suite(l)==0) OR 
-                    (suite(suite(l) ISNOT NULL AND premier(suite(suite(l)==0)))))));
+    return (l ISNOT NULL)AND(
+        (premier(l)==0) OR (
+            (suite(l) ISNOT NULL) AND (
+                (premier(suite(l))==0) OR (
+                    (suite(suite(l) ISNOT NULL) AND (premier(suite(suite(l)==0))))
+                )
+            )
+        )
+    );
 }
 
 /*************************************************/
@@ -453,45 +471,44 @@ void ProcBegaye(Liste *L){
 /*           Permutations                        */
 /*                                               */
 /*************************************************/
+ListeListe permutation (int n);
+ListeListe concatll(ListeListe l1, ListeListe l2);
+ListeListe ATLTP(int n, ListeListe ll);
+ListeListe ATP (int n, Liste l);
+ListeListe AETTL (int n, ListeListe ll);
 
 
-
-
+// Ajouter En Tete Toutes Listes : (3,[[1,2],[4]]) -> [[3,1,2],[3,4]]
 ListeListe AETTL (int n, ListeListe ll){
     if (ll==NULL) return ll;
     else return ajoutell(ajoute(n,ll->list),AETTL(n,ll->suivant));
 }
 
+// ajouter n a Toutes les Positions de l
 ListeListe ATP (int n, Liste l){
     if (estVide(l)) {
         ajoute(n,l);
-        ListeListe ll;
+        ListeListe ll = NULL;
         return ajoutell(l,ll);
     } else return ajoutell(ajoute(n,l),AETTL(premier(l),ATP(n,suite(l))));
 }
 
-Liste ATLTP(int n, ListeListe ll){
-    if (ll == NULL){
-        Liste l;
-        return l; // peut-on faire return (Liste)NULL; ? 
-    }else{
-        return concat(ATP(n, ll->list), ATLTP(n, ll->suivant));
-    }
+// Ajouter a Toutes les Listes a Toutes les Position 
+ListeListe ATLTP(int n, ListeListe ll){
+    if (ll == NULL) return ll;
+    else return concatll(ATP(n, ll->list), ATLTP(n, ll->suivant));
 }
 
-Liste concat(Liste l1, Liste l2){
-    if (estVide(l1)) return l2;
-    else return ajoute(premier(l1),concat(suite(l1),l2));
+// [a,b,c]^[d,e] => [a,b,c,d,e]
+ListeListe concatll(ListeListe l1, ListeListe l2){
+    if (l1 == NULL) return l2;
+    else return ajoutell(l1->list,concatll(l1->suivant,l2));
 }
 
-
+// 2 -> [[1,2],[2,1]]
 ListeListe permutation (int n){
-    if (n==0){
-        ListeListe ll;
-        return ll;
-    }else{
-        return ATLTP(n, permutation(n-1));
-    }
+    if (n==0) return NULL;
+    else return ATLTP(n, permutation(n-1));
 }
 
 
@@ -570,6 +587,11 @@ int main(int argc, char** argv)
           poup(l) ;
 
     VideListe(&l);
+
+
+
+    affiche_recLL(permutation(3));
+
     return 0;
 }
 

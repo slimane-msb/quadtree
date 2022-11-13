@@ -46,15 +46,15 @@
 # FBeg rec
 
 
-# FBeg RT   (%todo nassim)
+# FBeg RT   (%todo mazino)
         yep... c'est la première version correcte que je vois, et j'ai presque fini. Ce sera peut-être la seule (%yep done)
 
-        Notes : au lieu de deux res = &((**res).suivant);, vous pouvez faire un seul res\suite\suite, ou bien appeler sur ptsuite/suite, itou pour les suivantes, mais ce que vous faites marche aussi. (% TODO nassim )
+        Notes : au lieu de deux res = &((**res).suivant);, vous pouvez faire un seul res\suite\suite, ou bien appeler sur ptsuite/suite, itou pour les suivantes, mais ce que vous faites marche aussi. (% TODO mazino )
 
         Liste res;    initVide(&res); peut devenir liste res = NULL ; (? pour quel fonctionne)
 
-# FBeg It :  (%todo nassim)
-        c'est presque ça (là encore; première fois) (% TODO nassim  | bien joue pour ces deux)
+# FBeg It :  (%todo mazino)
+        c'est presque ça (là encore; première fois) (% TODO mazino  | bien joue pour ces deux)
 
         mais free non compris, free(p) rend à la mémoire la variable pointée par p
 

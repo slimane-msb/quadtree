@@ -391,6 +391,9 @@ void FctBegayeTermBis(Liste l, Liste* res){
 
 }
 
+// version avec suite(l)
+// TODO 
+
 Liste FctBegayeTerm(Liste l){
     Liste res;
     initVide(&res);

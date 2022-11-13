@@ -34,13 +34,13 @@ NZAVPK SP    BUG D : Depile au lieu de Suite, ce qui détruit la liste. (% done)
 NZAPRK
 
 FBeg rec
-FBeg RT   yep... c'est la première version correcte que je vois, et j'ai presque fini. Ce sera peut-être la seule
+FBeg RT   yep... c'est la première version correcte que je vois, et j'ai presque fini. Ce sera peut-être la seule (%yep done)
 
-Notes : au lieu de deux res = &((**res).suivant);, vous pouvez faire un seul res\suite\suite, ou bien appeler sur ptsuite/suite, itou pour les suivantes, mais ce que vous faites marche aussi.
+Notes : au lieu de deux res = &((**res).suivant);, vous pouvez faire un seul res\suite\suite, ou bien appeler sur ptsuite/suite, itou pour les suivantes, mais ce que vous faites marche aussi. (% TODO nassim )
 
-Liste res;    initVide(&res); peut devenir liste res = NULL ;
+Liste res;    initVide(&res); peut devenir liste res = NULL ; (? pour quel fonctionne)
 
-FBeg It : c'est presque ça (là encore; première fois)
+FBeg It : c'est presque ça (là encore; première fois) (% TODO nassim  | bien joue pour ces deux)
 
 mais free non compris, free(p) rend à la mémoire la variable pointée par p
 

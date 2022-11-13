@@ -10,7 +10,7 @@
 
 #define AND &&
 #define OR ||
-#define ISNOT !=
+// #define ISNOT !=
 #define NOT !
 #define then
 
@@ -197,7 +197,7 @@ int longueur_iter (Liste l)
 {
     Liste P = l;
     int cpt = 0 ;
-    while (P ISNOT NULL)
+    while (P != NULL)
     {   P = P->suivant ;
         cpt++ ;
     }
@@ -222,15 +222,15 @@ void VD (Liste *L)
 
 void VireDernier_rec (Liste *L)
 {
-     if ( (*L) ISNOT NULL )
+     if ( (*L) != NULL )
           VD(L);        // moralement : VD(& (*L)) ;
 }
 
 void VireDernier_iter (Liste *L)
 {
-    if ( (*L) ISNOT NULL)
+    if ( (*L) != NULL)
     {
-        while ( ((**L).suivant) ISNOT NULL )
+        while ( ((**L).suivant) != NULL )
                  L = & ( (**L).suivant ) ;
         free(*L) ;
         *L = NULL ;
@@ -264,11 +264,11 @@ void VideListe(Liste *L)
 
 /*compilation paresseuse */
 bool ZeroEnPositionUnOuDeuxOuTrois(Liste l){
-    return (l ISNOT NULL)AND(
+    return (l != NULL)AND(
         (premier(l)==0) OR (
-            (suite(l) ISNOT NULL) AND (
+            (suite(l) != NULL) AND (
                 (premier(suite(l))==0) OR (
-                    (suite(suite(l) ISNOT NULL) AND (premier(suite(suite(l)==0))))
+                    (NULL != (suite(suite(l)) ) AND (premier(suite(suite(l)))==0))
                 )
             )
         )
@@ -316,9 +316,9 @@ void NombreDe0AvantPositionKRecTermProcBis(Liste L, int K, int *res){
     if (!(estVide(L) || K <= 0)){
         if (premier(L) == 0){
             *res+=1;
-            NombreDe0AvantPositionKRecTermBis(suite(L), K-1, res);
+            NombreDe0AvantPositionKRecTermProcBis(suite(L), K-1, res);
         }
-        else NombreDe0AvantPositionKRecTermBis(suite(L), K-1, res);
+        else NombreDe0AvantPositionKRecTermProcBis(suite(L), K-1, res);
     }
 }
 int NombreDe0AvantPositionKRecTermProc(Liste L, int K){

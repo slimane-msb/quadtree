@@ -3,12 +3,12 @@ E
 
 Yn
 
-POW  // dans le désordre, P1 après P2ab après P1b qui appel P1 ... ( done : reorganisation) 
-P1 version 1 ; RNR gestion n<0 recursif : Malhabile : ne pas refaire le test n<0 à chaque appel (done : power1bisc)
+POW  // dans le désordre, P1 après P2ab après P1b qui appel P1 ... ( %done : reorganisation) 
+P1 version 1 ; RNR gestion n<0 recursif : Malhabile : ne pas refaire le test n<0 à chaque appel (%done : power1bisc)
 
-P1 version 2 : on peut se passer de coder P1neg ( done : power1bisc)
+P1 version 2 : on peut se passer de coder P1neg ( %done : power1bisc)
 
-P2a, n<0 ne va pas marcher
+P2a, n<0 ne va pas marcher (% done: power2abis)
 
 Ack
 

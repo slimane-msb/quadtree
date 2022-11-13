@@ -156,7 +156,7 @@ double power1bisc(int x, int n){
     return (double)1/power1(x,-n);
 } 
 
-
+// version n>=0
 int power2a (int x, int n){
     int r = 1; 
     int i; 
@@ -164,13 +164,10 @@ int power2a (int x, int n){
     return r;
 } 
 
-
+// version aussi pour n<0
 double power2abis (int x, int n){
-    double r = 1; 
-    int i; 
-    for (i=1; i<n+1; i++) r=r*x; 
-    if (n<0) return 1.0/r;
-    return r;
+    if (n>=0) return (double)power2a(x,n);
+    else return (double)1.0/power2a(x,-n);
 } 
 
 

@@ -277,12 +277,11 @@ bool Pluscourte(Liste l1, Liste l2){
 /*************************************************/
 /*rec non terminal*/
 int NombreDe0AvantPositionKRec(Liste L, int K){
-    if (estVide(L) || K <= 0)
-        return 0;
-    else if (premier(L) == 0){
-        return 1 + NombreDe0AvantPositionKRec(suite(L), K-1);
-    }
+    if (estVide(L) || K <= 0) return 0;
+    if (premier(L) == 0) return 1 + NombreDe0AvantPositionKRec(suite(L), K-1);
+    return NombreDe0AvantPositionKRec(suite(L), K-1);
 }
+
 /*rec sous fonction terminal */
 int NombreDe0AvantPositionKRecTermBis(Liste L, int K, int res){
   

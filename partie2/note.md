@@ -18,7 +18,7 @@ ZPUDT
 
 PC LD0 : test lourd (si L1, si L2)  (% done)
 
-NZAVPK rec : il manque un else ... FOnctions : vérifiez que vous avez bien autant de else que de if. Si un else manque, vous devez savoir pourquoi.
+NZAVPK rec : il manque un else ... FOnctions : vérifiez que vous avez bien autant de else que de if. Si un else manque, vous devez savoir pourquoi. (% done )
 NZAVPK it
 NZAVPK SF ldB++  rec(in j++) j++ c'est l'instruction j=j+1. Utilisez j+1 ici
 

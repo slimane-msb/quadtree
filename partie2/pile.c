@@ -46,33 +46,50 @@ typedef BlocListe *ListeListe ;
 /*                                               */
 /*************************************************/
 
+// rendre une liste vide 
+Liste listeVide();
+ListeListe listelisteVide();
+
+// renvoyer une liste a un elem
+Liste initElem(int n);
+ListeListe initElemll(Liste l);
+
 /* initialise une Liste vide */
 void initVide(Liste *L);
+void initVidell( ListeListe *L);
 
 /* renvoie 1 si la Liste en parametre est vide, 0 sinon */
 bool estVide(Liste l);
+bool estVidell(ListeListe l);
 
 /* renvoie le premier element de la Liste en parametre */
 int premier(Liste l);
+Liste premierll(ListeListe l);
 
 /* renvoie une nouvelle Liste correspondant a celle en parametre, avec l'element x ajoute en haut de la pile */
 Liste ajoute(int x, Liste l);
+ListeListe ajoutell(Liste x, ListeListe l);
 
 /* modifie la Liste en parametre: x est ajoute comme premier element */
 void empile(int x, Liste* L);
+void empilell(Liste l, ListeListe *L);
 
 /* renvoie une nouvelle Liste correspondant a celle en parametre sans son premier element */
 Liste suite(Liste l);
+Liste suitell(ListeListe l);
 
 /* modifie la Liste en parametre: le premier element est retire */
 void depile(Liste* l);
+void depilell(ListeListe *L);
 
 /* affichage simple en recursif et en iteratif */
 void affiche_rec(Liste l);
+void affiche_recLL(ListeListe ll);
 void affiche_iter(Liste l);
 
 /* longueur en recursif et en iteratif */
 int longueur_rec (Liste l);
+int longueur_recll (ListeListe ll);
 int longueur_iter (Liste l);
 
 /*  Elimination du dernier element en recursif et en iteratif  */
@@ -81,6 +98,37 @@ void VD (Liste *L);
 void VireDernier_rec (Liste *L);
 void VireDernier_iter (Liste *L);
 
+
+void VD (Liste *L);
+void VireDernier_rec (Liste *L);
+void VireDernier_iter (Liste *L);
+void VideListe(Liste *L);
+
+
+bool ZeroEnPositionUnOuDeuxOuTrois(Liste l);
+bool Pluscourte(Liste l1, Liste l2);
+int NombreDe0AvantPositionKRec(Liste L, int K);
+int NombreDe0AvantPositionKRecTermBis(Liste L, int K, int res);
+int NombreDe0AvantPositionKRecTerm(Liste L, int K);
+void NombreDe0AvantPositionKRecTermProcBis(Liste L, int K, int *res);
+int NombreDe0AvantPositionKRecTermProc(Liste L, int K);
+int NombreDe0AvantPositionKIter(Liste L, int K);
+void NombreDe0ApresRetroPositionKBis(Liste L,int* K,int* res);
+int NombreDe0ApresRetroPositionK(Liste L,int K);
+Liste FctBegayeSimple(Liste l);
+void FctBegayeTermBis(Liste l, Liste* res);
+Liste FctBegayeTerm(Liste l);
+Liste FctBegayeIter(Liste l);
+void ProcBegaye(Liste *L);
+
+ListeListe permutation (int n);
+ListeListe concatll(ListeListe ll1, ListeListe ll2);
+ListeListe ATLTP(int n, ListeListe ll);
+ListeListe ATP (int n, Liste l);
+ListeListe AETTL (int n, ListeListe ll);
+
+void retire (Liste l, Bloc* p);
+void poup (Liste l);
 
 /*************************************************/
 /*                                               */
@@ -106,7 +154,7 @@ Liste initElem(int n){
 
 ListeListe initElemll(Liste l){
     ListeListe ll = NULL;
-    empile(l, &ll);
+    empilell(l, &ll);
     return ll;
 }
 
@@ -136,7 +184,7 @@ int premier(Liste l)
     return l->nombre ; 
 }
 
-int premierll(ListeListe l)
+Liste premierll(ListeListe l)
 {
     return l->list ; 
 }
@@ -535,11 +583,6 @@ void ProcBegaye(Liste *L){
 /*************************************************/
 
 
-ListeListe permutation (int n);
-ListeListe concatll(ListeListe ll1, ListeListe ll2);
-ListeListe ATLTP(int n, ListeListe ll);
-ListeListe ATP (int n, Liste l);
-ListeListe AETTL (int n, ListeListe ll);
 
 
 
@@ -573,7 +616,7 @@ ListeListe ATLTP(int n, ListeListe ll){
 // 2 -> [[1,2],[2,1]]
 ListeListe permutation (int n){
     if (n==0) return listelisteVide();
-    if (n==1)  return initElemll(initElem(n));   // return [[1]]
+    if (n==1)  return initElemll(initElem(n)); // return [[1]]
     else return ATLTP(n, permutation(n-1));
 }
 

@@ -146,7 +146,7 @@ ListeListe AETTL (int n, ListeListe ll);
 void retire (Liste l, Bloc* p);
 void poup (Liste l);
 
-Liste testBefore(int a, int b, int c, int d, int e);
+Liste testBefore(int * t, int len);
 ListeListe testBeforell();
 void affichageTest (Liste l);
 void affichageTestll (ListeListe l);
@@ -683,14 +683,11 @@ void retire (Liste l, Bloc* p){
 /*                                               */
 /*************************************************/
 
-Liste testBefore(int a, int b, int c, int d, int e){
+Liste testBefore(int * t, int len){
     Liste l ;
     initVide (&l) ;
-    empile(e, &l) ;
-    empile(d, &l) ;
-    empile(c, &l) ;
-    empile(b, &l) ;
-    empile(a, &l) ;
+    int i;
+    for (i=len-1; i>=0; i--) empile(t[i],&l);
     return l;
 }
 
@@ -785,11 +782,13 @@ int main(int argc, char** argv)
 
     // zeroen123
     printf("ZeroEnPositionUnOuDeuxOuTrois\n");
-    Liste l1 = testBefore(1,2,3,4,5);
+    int t[] = {1,2,3,4,5};
+    Liste l1 = testBefore(t,5);
     affichageTest(l1);
     printf("ZeroEnPositionUnOuDeuxOuTrois de l = " ); printBool(ZeroEnPositionUnOuDeuxOuTrois(l1));printf("\n\n");
 
-    Liste l2 = testBefore(1,5,8,0,5);
+    t[1]=0;
+    Liste l2 = testBefore(t,5);
     affichageTest(l2);
     printf("ZeroEnPositionUnOuDeuxOuTrois de l = " ); printBool(ZeroEnPositionUnOuDeuxOuTrois(l2));printf("\n\n");
 

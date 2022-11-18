@@ -88,6 +88,28 @@ void VireDernier_iter (Liste *L);
 /*                                               */
 /*************************************************/
 
+Liste listeVide(){
+    Liste l = NULL;
+    return l;
+}
+
+ListeListe listelisteVide(){
+    ListeListe ll = NULL;
+    return ll;
+}
+
+Liste initElem(int n){
+    Liste l = NULL;
+    empile(n, &l);
+    return l;
+}
+
+ListeListe initElemll(Liste l){
+    ListeListe ll = NULL;
+    empile(l, &ll);
+    return ll;
+}
+
 
 void initVide( Liste *L)
 {
@@ -223,6 +245,13 @@ int longueur_rec (Liste l)
     if (l == NULL)
          return 0 ;
     else return (1 + longueur_rec(l->suivant)) ;
+}
+
+int longueur_recll (ListeListe ll)
+{
+    if (estVidell(ll))
+         return 0 ;
+    else return (1 + longueur_recll(suitell(ll))) ;
 }
 
 
@@ -543,11 +572,8 @@ ListeListe ATLTP(int n, ListeListe ll){
 
 // 2 -> [[1,2],[2,1]]
 ListeListe permutation (int n){
-    if (n==0) return NULL;
-    if (n==1) {
-        // return [[1]]
-
-    }
+    if (n==0) return listelisteVide();
+    if (n==1)  return initElemll(initElem(n));   // return [[1]]
     else return ATLTP(n, permutation(n-1));
 }
 

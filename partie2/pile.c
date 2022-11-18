@@ -94,7 +94,17 @@ void initVide( Liste *L)
     *L = NULL ;
 }
 
+void initVidell( ListeListe *L)
+{
+    *L = NULL ;
+}
+
 bool estVide(Liste l)
+{
+    return l == NULL ;
+}
+
+bool estVidell(ListeListe l)
 {
     return l == NULL ;
 }
@@ -102,6 +112,11 @@ bool estVide(Liste l)
 int premier(Liste l)
 {
     return l->nombre ; 
+}
+
+int premierll(ListeListe l)
+{
+    return l->list ; 
 }
 
 Liste ajoute(int x, Liste l)
@@ -125,7 +140,17 @@ void empile(int x, Liste *L)
       *L = ajoute(x,*L) ; 
 }
 
+void empilell(Liste l, ListeListe *L)
+{
+      *L = ajoutell(l,*L) ; 
+}
+
 Liste suite(Liste l)
+{
+    return l->suivant ;
+}
+
+Liste suitell(ListeListe l)
 {
     return l->suivant ;
 }
@@ -135,6 +160,14 @@ void depile(Liste *L)
 {
     Liste tmp = *L ;
     *L = suite(*L) ;
+    free(tmp) ;
+}
+
+void depilell(ListeListe *L)
+{
+    ListeListe tmp = *L ;
+    *L = suite(*L) ;
+    depile(tmp->list);
     free(tmp) ;
 }
 
@@ -170,7 +203,7 @@ void affiche_iter(Liste l)
 
 void affiche_recLL(ListeListe ll)
 {
-    if(ll=NULL)
+    if(estVidell(ll))
         printf("\n");
     else
     {
@@ -474,7 +507,7 @@ void ProcBegaye(Liste *L){
 
 
 ListeListe permutation (int n);
-ListeListe concatll(ListeListe l1, ListeListe l2);
+ListeListe concatll(ListeListe ll1, ListeListe ll2);
 ListeListe ATLTP(int n, ListeListe ll);
 ListeListe ATP (int n, Liste l);
 ListeListe AETTL (int n, ListeListe ll);
@@ -482,15 +515,15 @@ ListeListe AETTL (int n, ListeListe ll);
 
 
 // [a,b,c]^[d,e] => [a,b,c,d,e]
-ListeListe concatll(ListeListe l1, ListeListe l2){
-    if (l1 == NULL) return l2;
-    else return ajoutell(l1->list,concatll(l1->suivant,l2));
+ListeListe concatll(ListeListe ll1, ListeListe ll2){
+    if (estVidell(ll1)) return ll2;
+    else return ajoutell(premierll(ll1),concatll(suitell(ll1),ll2));
 }
 
 // Ajouter En Tete Toutes Listes : (3,[[1,2],[4]]) -> [[3,1,2],[3,4]]
 ListeListe AETTL (int n, ListeListe ll){
-    if (ll==NULL) return ll;
-    else return (ajoutell(ajoute(n,ll->list),AETTL(n,ll->suivant)));
+    if (estVidell(ll)) return ll;
+    else return (ajoutell(ajoute(n,premierll(ll)),AETTL(n,suitell(ll))));
 }
 
 
@@ -504,13 +537,17 @@ ListeListe ATP (int n, Liste l){
 
 // Ajouter a Toutes les Listes a Toutes les Position 
 ListeListe ATLTP(int n, ListeListe ll){
-    if (ll == NULL) return ll;
-    else return concatll(ATP(n, ll->list), ATLTP(n, ll->suivant));
+    if (estVidell(ll)) return ll;
+    else return concatll(ATP(n, premierll(ll)), ATLTP(n, suitell(ll)));
 }
 
 // 2 -> [[1,2],[2,1]]
 ListeListe permutation (int n){
     if (n==0) return NULL;
+    if (n==1) {
+        // return [[1]]
+
+    }
     else return ATLTP(n, permutation(n-1));
 }
 

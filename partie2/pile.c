@@ -76,7 +76,7 @@ void empilell(Liste l, ListeListe *L);
 
 /* renvoie une nouvelle Liste correspondant a celle en parametre sans son premier element */
 Liste suite(Liste l);
-Liste suitell(ListeListe l);
+ListeListe suitell(ListeListe ll);
 
 /* modifie la Liste en parametre: le premier element est retire */
 void depile(Liste* l);
@@ -220,9 +220,9 @@ Liste suite(Liste l)
     return l->suivant ;
 }
 
-Liste suitell(ListeListe l)
+ListeListe suitell(ListeListe ll)
 {
-    return l->suivant ;
+    return ll->suivant ;
 }
 
 
@@ -236,8 +236,8 @@ void depile(Liste *L)
 void depilell(ListeListe *L)
 {
     ListeListe tmp = *L ;
-    *L = suite(*L) ;
-    depile(tmp->list);
+    *L = suitell(*L) ;
+    depile(&(tmp->list));
     free(tmp) ;
 }
 

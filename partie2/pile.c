@@ -764,14 +764,14 @@ int main(int argc, char** argv)
     // tests : 
 
     // permutation : 
-    printf ("afficher permutation de 3\n");
+    printf ("   afficher permutation de 3\n");
     affiche_recLL(permutation(3));
 
-    printf ("afficher permutation de 4\n");
+    printf ("   afficher permutation de 4\n");
     affiche_recLL(permutation(4));
 
     // depilell 
-    printf ("tester depile liste de lsite : \n");
+    printf ("   tester depile liste de lsite : \n");
     ListeListe ll = testBeforell();
     affichageTestll(ll);
 
@@ -781,7 +781,7 @@ int main(int argc, char** argv)
 
 
     // zeroen123
-    printf("ZeroEnPositionUnOuDeuxOuTrois\n");
+    printf("    ZeroEnPositionUnOuDeuxOuTrois\n");
     int t[] = {1,2,3,4,5};
     Liste l1 = testBefore(t,5);
     affichageTest(l1);
@@ -793,11 +793,25 @@ int main(int argc, char** argv)
     printf("ZeroEnPositionUnOuDeuxOuTrois de l = " ); printBool(ZeroEnPositionUnOuDeuxOuTrois(l2));printf("\n\n");
 
 
-    // 
-    printf("   \n");
+    // Pluscourte
+    printf("    Pluscourte  \n");
 
-    // 
-    printf("   \n");
+    int t2[] = {1,2,3,4,5,6};
+    Liste l3 = testBefore(t2,6);
+    printf("Pluscourte (l2,l3)  = " ); printBool(Pluscourte(l2,l3));printf("\n\n");
+    printf("Pluscourte (l3,l2)  = " ); printBool(Pluscourte(l3,l2));printf("\n\n");
+
+
+
+
+
+    // NombreDe0AvantPositionKRec
+    printf("    NombreDe0AvantPositionKRec  \n");
+    affichageTest(l2);
+    int k=-1;
+    printf("NombreDe0AvantPositionKRec (l2,%d)  = %d ",k ,NombreDe0AvantPositionKRec(l2,k)) ;printf("\n\n");
+
+
     
     
     // 

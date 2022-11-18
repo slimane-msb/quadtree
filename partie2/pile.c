@@ -16,6 +16,21 @@
 
 typedef enum { FALSE, TRUE} bool;
 
+void printBool( bool b){
+    switch (b)
+    {
+    case FALSE:
+        printf("false");
+        break;
+    case TRUE:
+        printf("true");
+        break;
+    
+    default:
+        break;
+    }
+}
+
 /*************************************************/
 /*                                               */
 /*          definition type liste                */
@@ -86,6 +101,7 @@ void depilell(ListeListe *L);
 void affiche_rec(Liste l);
 void affiche_recLL(ListeListe ll);
 void affiche_iter(Liste l);
+void affiche_recSansRALL(Liste l);
 
 /* longueur en recursif et en iteratif */
 int longueur_rec (Liste l);
@@ -129,6 +145,11 @@ ListeListe AETTL (int n, ListeListe ll);
 
 void retire (Liste l, Bloc* p);
 void poup (Liste l);
+
+Liste testBefore(int a, int b, int c, int d, int e);
+ListeListe testBeforell();
+void affichageTest (Liste l);
+void affichageTestll (ListeListe l);
 
 /*************************************************/
 /*                                               */
@@ -237,7 +258,7 @@ void depilell(ListeListe *L)
 {
     ListeListe tmp = *L ;
     *L = suitell(*L) ;
-    depile(&(tmp->list));
+    VideListe(&(tmp->list));
     free(tmp) ;
 }
 
@@ -255,6 +276,15 @@ void affiche_rec(Liste l)
     {
         printf("%d ", premier(l));
         affiche_rec(suite(l));
+    }
+}
+
+void affiche_recSansRALL(Liste l)
+{
+    if(! estVide(l))
+    {
+        printf("%d ", premier(l));
+        affiche_recSansRALL(suite(l));
     }
 }
 
@@ -277,7 +307,9 @@ void affiche_recLL(ListeListe ll)
         printf("\n");
     else
     {
-        affiche_rec(ll->list);
+        printf("[");
+        affiche_recSansRALL(ll->list);
+        printf("]\n");
         affiche_recLL(ll->suivant);
     }
 }
@@ -363,8 +395,6 @@ void VideListe(Liste *L)
     }
       
 }
-
-// todo: signature cop
 
 /*************************************************/
 /*                                               */
@@ -647,8 +677,30 @@ void retire (Liste l, Bloc* p){
 
 
 
+/*************************************************/
+/*                                               */
+/*           test gen                            */
+/*                                               */
+/*************************************************/
 
+Liste testBefore(int a, int b, int c, int d, int e){
+    Liste l ;
+    initVide (&l) ;
+    empile(e, &l) ;
+    empile(d, &l) ;
+    empile(c, &l) ;
+    empile(b, &l) ;
+    empile(a, &l) ;
+    return l;
+}
 
+ListeListe testBeforell(){
+    ListeListe ll = initElemll(initElem(3));
+    empilell(initElem(2), &ll);
+    empile(1,&(ll->list));
+    empile(2,&(ll->suivant->list));
+    return ll;
+}
 
 
 /*************************************************/
@@ -668,6 +720,21 @@ void poup (Liste l)
                            longueur_iter(l) 
                ) ;
 }
+
+void affichageTest (Liste l)
+{
+    printf("Affichage liste \n") ;
+    printf("Longueur  %d \n", longueur_rec(l)) ;
+    affiche_rec(l) ;
+}
+
+void affichageTestll (ListeListe ll)
+{
+    printf("Affichage liste de liste \n") ;
+    printf("Longueur %d \n", longueur_recll(ll)) ;
+    affiche_recLL(ll) ;
+}
+
 
 int main(int argc, char** argv)
 {
@@ -697,9 +764,37 @@ int main(int argc, char** argv)
 
     VideListe(&l);
 
+    // tests : 
 
-
+    // permutation : 
+    printf ("afficher permutation de 3\n");
     affiche_recLL(permutation(3));
+
+    printf ("afficher permutation de 4\n");
+    affiche_recLL(permutation(4));
+
+    // depilell 
+    printf ("tester depile liste de lsite : \n");
+    ListeListe ll = testBeforell();
+    affichageTestll(ll);
+
+    printf("afficher depile(ll)\n");
+    depilell(&ll);
+    affichageTestll(ll);
+
+
+    // zeroen123
+    printf("ZeroEnPositionUnOuDeuxOuTrois\n");
+    Liste l1 = testBefore(1,2,3,4,5);
+    affichageTest(l1);
+    printf("ZeroEnPositionUnOuDeuxOuTrois de l = " ); printBool(ZeroEnPositionUnOuDeuxOuTrois(l1));printf("\n\n");
+
+    Liste l2 = testBefore(1,0,3,4,5);
+    affichageTest(l2);
+    printf("ZeroEnPositionUnOuDeuxOuTrois de l = " ); printBool(ZeroEnPositionUnOuDeuxOuTrois(l2));printf("\n");
+
+
+
 
     return 0;
 }

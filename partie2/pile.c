@@ -789,9 +789,102 @@ int main(int argc, char** argv)
     affichageTest(l1);
     printf("ZeroEnPositionUnOuDeuxOuTrois de l = " ); printBool(ZeroEnPositionUnOuDeuxOuTrois(l1));printf("\n\n");
 
-    Liste l2 = testBefore(1,0,3,4,5);
+    Liste l2 = testBefore(1,5,8,0,5);
     affichageTest(l2);
-    printf("ZeroEnPositionUnOuDeuxOuTrois de l = " ); printBool(ZeroEnPositionUnOuDeuxOuTrois(l2));printf("\n");
+    printf("ZeroEnPositionUnOuDeuxOuTrois de l = " ); printBool(ZeroEnPositionUnOuDeuxOuTrois(l2));printf("\n\n");
+
+
+    // 
+    printf("   \n");
+
+    // 
+    printf("   \n");
+    
+    
+    // 
+    printf("   \n");
+
+
+    // 
+    printf("   \n");
+
+
+
+    // 
+    printf("   \n");
+
+
+
+
+
+    // 
+    printf("   \n");
+
+
+
+
+    // 
+    printf("   \n");
+
+
+
+
+    // 
+    printf("   \n");
+
+
+
+
+    // 
+    printf("   \n");
+
+
+
+
+    // 
+    printf("   \n");
+
+
+
+
+    // 
+    printf("   \n");
+
+
+
+
+    // 
+    printf("   \n");
+
+
+
+
+    // 
+    printf("   \n");
+
+
+
+
+    // 
+    printf("   \n");
+
+
+
+
+    // 
+    printf("   \n");
+
+
+
+
+    // 
+    printf("   \n");
+
+
+
+
+
+
 
 
 

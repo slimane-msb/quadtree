@@ -540,9 +540,8 @@ void FctBegayeTermBis(Liste l, Liste* res){
     if (l != NULL){
         if (premier(l) > 0){
             empile(premier(l), res);
-            res = &((**res).suivant);
             empile(premier(l), res);
-            res = &((**res).suivant);
+            res = &((*res)->suivant->suivant);
         }
         FctBegayeTermBis(suite(l),res);
     }
@@ -571,15 +570,12 @@ Liste FctBegayeIter(Liste l){
     while(p != NULL){
         if (premier(p) > 0 ){
             empile(premier(p), tmp);
-            tmp = &((**tmp).suivant);
             empile(premier(p), tmp);
-            tmp = &((**tmp).suivant);
+            tmp = &((*tmp)->suivant->suivant);
             
         }
         p = suite(p);    
     }
-    free(*tmp);
-    free(p);
     return res;
 }
 
@@ -597,8 +593,7 @@ void ProcBegaye(Liste *L){
         } 
         else if (premier(*L) > 0){
             empile(premier(*L),L);
-            L = &((**L).suivant);
-            L = &((**L).suivant);    
+            L = &((*L)->suivant->suivant);   
         } 
         ProcBegaye(L);;
     }

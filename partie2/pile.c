@@ -665,7 +665,7 @@ void retire (Liste* l, Bloc* p){
 
         } 
         if (!estVide(p->pred)) p->pred->suivant = suite(p);
-        // free(&p);
+        free(p);
     }
 }
     
@@ -917,7 +917,7 @@ int main(int argc, char** argv)
     int posk=3; 
     printf ("\tgetptr(%d).value=%d\n", posk, ((getptr(lbis,posk)))->nombre);
 
-    printf("retire(lbis,getptr(lbis,posk)); \n");
+    printf("retire(lbis,getptr(lbis,%d)=>dont la valeur est : %d); \n",posk,((getptr(lbis,posk)))->nombre);
     retire(&lbis,(getptr(lbis,posk)));
     // retire(&lbis,lbis->suivant);
     affichageTest(lbis);

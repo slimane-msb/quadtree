@@ -143,8 +143,6 @@ ListeListe ATLTP(int n, ListeListe ll);
 ListeListe ATP (int n, Liste l);
 ListeListe AETTL (int n, ListeListe ll);
 
-void retire (Liste* l, Bloc* p);
-Bloc* getptr(Liste lbis, int n);
 void poup (Liste l);
 
 Liste testBefore(int * t, int len);
@@ -216,6 +214,8 @@ Liste ajoute(int x, Liste l)
     Liste tmp = (Liste) malloc(sizeof(Bloc)) ;
     tmp->nombre = x ;
     tmp->suivant = l ;
+    tmp->pred = NULL;
+    if (!estVide(l)) (l)->pred = (Bloc*)tmp;
     return tmp ;
 }
 
@@ -657,17 +657,20 @@ ListeListe permutation (int n){
 
 
 void retire (Liste* l, Bloc* p){
-    if (!estVide(*l)) {
-        if ((*l)==p){
-            (*l)->pred->suivant = (*l)->suivant;
-            (*l)->suivant->pred = (*l)->pred;
-            free(l);
-            return;
-        }else{
-            retire(&((*l)->suivant),p);
-        }
+    if (!(estVide(*l) || p == NULL)) {
+        if (*l == p ) *l = suite(p);
+        if (!estVide(p->suivant)){
+            printf("%d\n", (suite(p)->pred)->nombre);
+            suite(p)->pred = p->pred;
+
+        } 
+        if (!estVide(p->pred)) p->pred->suivant = suite(p);
+        // free(&p);
     }
 }
+    
+    
+
 
 // getprt(lbis,-1) = premier ptr, getptr(lbis,n>len)= null 
 Bloc* getptr(Liste lbis, int n){
@@ -904,16 +907,19 @@ int main(int argc, char** argv)
     
 
 
-    // test retire : 
+ 
+     // test retire :   
     printf("\n\nvoid retire (Liste l, Bloc* p)  \n");
     int tbis[] = {23,17,93,42};
-    Liste lbis = testBefore(t2,4);
+    Liste lbis = testBefore(tbis,4);
     affichageTest(lbis);
-            // test getptr
-            int posk=3; 
-            printf ("\tgetptr(%d).value=%d\n", posk, (getptr(lbis,posk))->nombre);
-    printf("retire(lbis,getptr(lbis,3)); \n");
-    retire(&lbis,getptr(lbis,3));
+       // test getptr
+    int posk=3; 
+    printf ("\tgetptr(%d).value=%d\n", posk, ((getptr(lbis,posk)))->nombre);
+
+    printf("retire(lbis,getptr(lbis,posk)); \n");
+    retire(&lbis,(getptr(lbis,posk)));
+    // retire(&lbis,lbis->suivant);
     affichageTest(lbis);
 
 

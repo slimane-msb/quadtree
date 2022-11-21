@@ -13,7 +13,7 @@ long ackermanIR(int m, long n);
 long ackerman(int m, long n);
 
 int main(){
-    int m = 5;  // pour 6 ca tourne sans resultat
+    int m = 2;  // pour 6 ca tourne sans resultat
     long n = 0;
     
     printf ("ack(%d,%ld)=%ld\n", m,n,ackerman(m,n));

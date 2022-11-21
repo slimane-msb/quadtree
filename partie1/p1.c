@@ -13,18 +13,22 @@ typedef enum { false, true } bool;
 double formuleE();
 void afficheSuiteEn();
 double power1bis(int x, int n);
-double power1bisb(int x, int n);
 double power2abis(int x, int n);
-double power1neg(int x, int n);
+double power1bisc(int x, int n);
 int power1(int x, int n);
 int power2a(int x, int n);
+double power2abis (int x, int n);
 int power2b(int x, int n);
+int pow3(int x, int n, int* r);
 int power3(int x, int n);
+int pow4 (int x, int n, int r);
 int power4(int x, int n);
 int power5(int x, int n);
 int power6(int x, int n);
 int power7(int x, int n);
+int pow8 (int x, int n, int r);
 int power8(int x, int n);
+int pow9 (int x, int n, int* r);
 int power9(int x, int n);
 int power10(int x, int n);
 
@@ -32,15 +36,143 @@ int main(){
     // printf("formule e = %lf\n", formuleE());
     // afficheSuiteEn();
 
+    // test simple : 
+    int 
+    x = 3; 
+    int n = 4;
+    printf( "\n\ntest pow : %d^%d\n\n",x,n);
+    printf (" power1bis(%d, %d)=%f \n", x,n,power1bis(x, n));
 
-    int N = 100; // a faire pour long 
+    printf (" power2abis(%d, %d)=%f \n", x,n,power2abis(x, n));
+
+    printf (" power1bisc(%d, %d)=%f \n", x,n,power1bisc(x, n));
+    printf (" power1(%d, %d)=%d \n", x,n,power1(x, n));
+    printf (" power2a(%d, %d)=%d \n", x,n,power2a(x, n)  );
+    printf (" power2abis (%d, %d)=%f \n", x,n,power2abis (x, n)  );
+    printf (" power2b(%d, %d)=%d \n", x,n,power2b(x, n)  );
+    printf (" power3(%d, %d)=%d \n", x,n,power3(x, n));
+    printf (" power4(%d, %d)=%d \n", x,n,power4(x, n));
+    printf (" power5(%d, %d)=%d \n", x,n,power5(x, n));
+    printf (" power6(%d, %d)=%d \n", x,n,power6(x, n));
+    printf (" power7(%d, %d)=%d \n", x,n,power7(x, n));
+    printf (" power8(%d, %d)=%d \n", x,n,power8(x, n));
+    printf (" power9(%d, %d)=%d \n", x,n,power9(x, n));
+    printf (" power10(%d, %d)=%d \n", x,n,power10(x, n)  );
+
+    
+    x = 0; 
+    n = 4;
+    printf( "\n\ntest pow : %d^%d\n\n",x,n);
+    printf (" power1bis(%d, %d)=%f \n", x,n,power1bis(x, n));
+
+    printf (" power2abis(%d, %d)=%f \n", x,n,power2abis(x, n));
+
+    printf (" power1bisc(%d, %d)=%f \n", x,n,power1bisc(x, n));
+    printf (" power1(%d, %d)=%d \n", x,n,power1(x, n));
+    printf (" power2a(%d, %d)=%d \n", x,n,power2a(x, n)  );
+    printf (" power2abis (%d, %d)=%f \n", x,n,power2abis (x, n)  );
+    printf (" power2b(%d, %d)=%d \n", x,n,power2b(x, n)  );
+    printf (" power3(%d, %d)=%d \n", x,n,power3(x, n));
+    printf (" power4(%d, %d)=%d \n", x,n,power4(x, n));
+    printf (" power5(%d, %d)=%d \n", x,n,power5(x, n));
+    printf (" power6(%d, %d)=%d \n", x,n,power6(x, n));
+    printf (" power7(%d, %d)=%d \n", x,n,power7(x, n));
+    printf (" power8(%d, %d)=%d \n", x,n,power8(x, n));
+    printf (" power9(%d, %d)=%d \n", x,n,power9(x, n));
+    printf (" power10(%d, %d)=%d \n", x,n,power10(x, n)  );
+
+    
+    x = 3; 
+    n = 0;
+    printf( "\n\ntest pow : %d^%d\n\n",x,n);
+    printf (" power1bis(%d, %d)=%f \n", x,n,power1bis(x, n));
+
+    printf (" power2abis(%d, %d)=%f \n", x,n,power2abis(x, n));
+
+    printf (" power1bisc(%d, %d)=%f \n", x,n,power1bisc(x, n));
+    printf (" power1(%d, %d)=%d \n", x,n,power1(x, n));
+    printf (" power2a(%d, %d)=%d \n", x,n,power2a(x, n)  );
+    printf (" power2abis (%d, %d)=%f \n", x,n,power2abis (x, n)  );
+    printf (" power2b(%d, %d)=%d \n", x,n,power2b(x, n)  );
+    printf (" power3(%d, %d)=%d \n", x,n,power3(x, n));
+    printf (" power4(%d, %d)=%d \n", x,n,power4(x, n));
+    printf (" power5(%d, %d)=%d \n", x,n,power5(x, n));
+    printf (" power6(%d, %d)=%d \n", x,n,power6(x, n));
+    printf (" power7(%d, %d)=%d \n", x,n,power7(x, n));
+    printf (" power8(%d, %d)=%d \n", x,n,power8(x, n));
+    printf (" power9(%d, %d)=%d \n", x,n,power9(x, n));
+    printf (" power10(%d, %d)=%d \n", x,n,power10(x, n)  );
+
+
+    // test neg : 
+    
+    x = -3; 
+    n = -4;
+    printf( "\n\ntest pow : %d^%d\n\n",x,n);
+    printf (" power1bis(%d, %d)=%f \n", x,n,power1bis(x, n));
+
+    printf (" power2abis(%d, %d)=%f \n", x,n,power2abis(x, n));
+
+    printf (" power1bisc(%d, %d)=%f \n", x,n,power1bisc(x, n));
+    printf (" power2abis (%d, %d)=%f \n", x,n,power2abis (x, n)  );
+
+    
+    x = -3 ; 
+    n = 0;
+    printf( "\n\ntest pow : %d^%d\n\n",x,n);
+    printf (" power1bis(%d, %d)=%f \n", x,n,power1bis(x, n));
+
+    printf (" power2abis(%d, %d)=%f \n", x,n,power2abis(x, n));
+
+    printf (" power1bisc(%d, %d)=%f \n", x,n,power1bisc(x, n));
+    printf (" power2abis (%d, %d)=%f \n", x,n,power2abis (x, n)  );
+
+    
+    x = -3 ; 
+    n = 5;
+    printf( "\n\ntest pow : %d^%d\n\n",x,n);
+    printf (" power1bis(%d, %d)=%f \n", x,n,power1bis(x, n));
+
+    printf (" power2abis(%d, %d)=%f \n", x,n,power2abis(x, n));
+
+    printf (" power1bisc(%d, %d)=%f \n", x,n,power1bisc(x, n));
+    printf (" power2abis (%d, %d)=%f \n", x,n,power2abis (x, n)  );
+
+    
+    x = 0 ; 
+    n = -4;
+    printf( "\n\ntest pow : %d^%d\n\n",x,n);
+    printf (" power1bis(%d, %d)=%f \n", x,n,power1bis(x, n));
+
+    printf (" power2abis(%d, %d)=%f \n", x,n,power2abis(x, n));
+
+    printf (" power1bisc(%d, %d)=%f \n", x,n,power1bisc(x, n));
+    printf (" power2abis (%d, %d)=%f \n", x,n,power2abis (x, n)  );
+
+    
+    x = 2 ; 
+    n = -4;
+    printf( "\n\ntest pow : %d^%d\n\n",x,n);
+    printf (" power1bis(%d, %d)=%f \n", x,n,power1bis(x, n));
+
+    printf (" power2abis(%d, %d)=%f \n", x,n,power2abis(x, n));
+
+    printf (" power1bisc(%d, %d)=%f \n", x,n,power1bisc(x, n));
+    printf (" power2abis (%d, %d)=%f \n", x,n,power2abis (x, n)  );
+
+
+
+    // test plus long 
+    int N = 100; 
     double pN = (1.0+1.0/N); 
+
+    printf ("\n\nplus de testes\n\n");
 
     // test Np 
     printf ("power1bis(%f,%d)=%f\n", pN,N,power1bis(pN,N));
     printf ("power2abis(%f,%d)=%f\n", pN,N,power2abis(pN,N));
     printf ("power1bis(%f,%d)=%lf\n", pN,N,power1bis(pN,N));
-    printf ("power1bisb(%f,%d)=%lf\n", pN,N,power1bisb(pN,N));
+
     printf ("power2abis(%f,%d)=%f\n", pN,N,power2abis(pN,N));
     printf ("power1(%f,%d)=%d\n", pN,N,power1(pN,N));
     printf ("power2a(%f,%d)=%d\n", pN,N,power2a(pN,N));
@@ -59,23 +191,6 @@ int main(){
         Votre compilateur semble-t-il effectuer l’optimisation du r ́ecursif terminal ? : oui
     */
 
-    // test simple 
-    // printf ("power1bis(%d,%d)=%f\n", 3,5,power1bis(3,5));
-    // printf ("power2abis(%d,%d)=%f\n", 3,5,power2abis(3,5));
-    // printf ("power1bis(%d,%d)=%lf\n", 3,-5,power1bis(3,-5));
-    // printf ("power1bis(%d,%d)=%lf\n", 3,-5,power1bisb(3,-5));
-    // printf ("power2abis(%d,%d)=%f\n", 3,5,power2abis(3,-5));
-    // printf ("power1(%d,%d)=%d\n", 3,5,power1(3,5));
-    // printf ("power2a(%d,%d)=%d\n", 3,5,power2a(3,5));
-    // printf ("power2b(%d,%d)=%d\n", 3,5,power2b(3,5));
-    // printf ("power3(%d,%d)=%d\n", 3,5,power3(3,5));
-    // printf ("power4(%d,%d)=%d\n", 3,5,power4(3,5));
-    // printf ("power5(%d,%d)=%d\n", 3,5,power5(3,5));
-    // printf ("power6(%d,%d)=%d\n", 3,5,power6(3,5));
-    // printf ("power7(%d,%d)=%d\n", 3,5,power7(3,5));
-    // printf ("power8(%d,%d)=%d\n", 3,5,power8(3,5));
-    // printf ("power9(%d,%d)=%d\n", 3,5,power9(3,5));
-    // printf ("power10(%d,%d)=%d\n", 3,5,power10(3,5));
     return EXIT_SUCCESS; 
 }
 
@@ -130,7 +245,7 @@ int power1(int x, int n){
 
 // version 1 bis : 
 
-// avec n pos || neg 
+// avec n pos || neg (version pourrie)
 double power1bis(int x, int n){
     if (n==0) return 1.0; 
     else {
@@ -141,16 +256,7 @@ double power1bis(int x, int n){
 
 
 // pour ne pas faire test n<0 pleusieur fois 
-double power1bisb(int x, int n){
-    if (n>=0) return (double)power1(x,n);
-    return power1neg(x,n);
-} 
-// AND
-double power1neg(int x, int n){
-    return (power1bis(x,n+1)*(1.0/x));
-}
 
-// se passer de coder P1neg
 double power1bisc(int x, int n){
     if (n>=0) return (double)power1(x,n);
     return (double)1/power1(x,-n);
@@ -169,6 +275,15 @@ double power2abis (int x, int n){
     if (n>=0) return (double)power2a(x,n);
     else return (double)1.0/power2a(x,-n);
 } 
+
+
+// version aussi pour n<0 et 0^0
+
+// double power2abisbis (int x, int n){
+//     assert(x==0 && n==0);
+//     if (n>=0) return (double)power2a(x,n);
+//     else return (double)1.0/power2a(x,-n);
+// } 
 
 
 

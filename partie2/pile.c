@@ -144,6 +144,7 @@ ListeListe ATP (int n, Liste l);
 ListeListe AETTL (int n, ListeListe ll);
 
 void retire (Liste l, Bloc* p);
+Bloc* getptr(Liste lbis, int n);
 void poup (Liste l);
 
 Liste testBefore(int * t, int len);
@@ -669,6 +670,12 @@ void retire (Liste l, Bloc* p){
     }
 }
 
+// getprt(lbis,-1) = premier ptr, getptr(lbis,n>len)= null 
+Bloc* getptr(Liste lbis, int n){
+    if (n>=1 || estVide(lbis)) return lbis; 
+    else return getptr(suite(lbis),n-1);
+}
+
 
 
 
@@ -783,6 +790,7 @@ int main(int argc, char** argv)
     printf("ZeroEnPositionUnOuDeuxOuTrois de l = " ); printBool(ZeroEnPositionUnOuDeuxOuTrois(l1));printf("\n\n");
 
     t[1]=0;
+    t[3]=0;
     Liste l2 = testBefore(t,5);
     affichageTest(l2);
     printf("ZeroEnPositionUnOuDeuxOuTrois de l = " ); printBool(ZeroEnPositionUnOuDeuxOuTrois(l2));printf("\n\n");
@@ -805,88 +813,104 @@ int main(int argc, char** argv)
     affichageTest(l2);
     int k=-1;
     printf("NombreDe0AvantPositionKRec (l2,%d)  = %d ",k ,NombreDe0AvantPositionKRec(l2,k)) ;printf("\n\n");
+    k=2;
+    printf("NombreDe0AvantPositionKRec (l2,%d)  = %d ",k ,NombreDe0AvantPositionKRec(l2,k)) ;printf("\n\n");
+    k=4;
+    printf("NombreDe0AvantPositionKRec (l2,%d)  = %d ",k ,NombreDe0AvantPositionKRec(l2,k)) ;printf("\n\n");
 
+
+    // test : int NombreDe0AvantPositionKRecTerm(Liste L, int K);
+    printf ("\n\ntest : int NombreDe0AvantPositionKRecTerm(Liste L, int K);\n\n");
+    k=-1;
+    printf("NombreDe0AvantPositionKRecTerm (l2,%d)  = %d ",k ,NombreDe0AvantPositionKRecTerm(l2,k)) ;printf("\n\n");
+    k=2;
+    printf("NombreDe0AvantPositionKRecTerm (l2,%d)  = %d ",k ,NombreDe0AvantPositionKRecTerm(l2,k)) ;printf("\n\n");
+    k=4;
+    printf("NombreDe0AvantPositionKRecTerm (l2,%d)  = %d ",k ,NombreDe0AvantPositionKRecTerm(l2,k)) ;printf("\n\n");
+   
+   
+   
+    // test : int NombreDe0AvantPositionKRecTermProc(Liste L, int K);
+    printf ("\n\ntest : int NombreDe0AvantPositionKRecTermProc(Liste L, int K);\n\n");
+    k=-1;
+    printf("NombreDe0AvantPositionKRecTermProc (l2,%d)  = %d ",k ,NombreDe0AvantPositionKRecTermProc(l2,k)) ;printf("\n\n");
+    k=2;
+    printf("NombreDe0AvantPositionKRecTermProc (l2,%d)  = %d ",k ,NombreDe0AvantPositionKRecTermProc(l2,k)) ;printf("\n\n");
+    k=4;
+    printf("NombreDe0AvantPositionKRecTermProc (l2,%d)  = %d ",k ,NombreDe0AvantPositionKRecTermProc(l2,k)) ;printf("\n\n");
+
+    
+    // test : int NombreDe0AvantPositionKIter(Liste L, int K);
+    printf ("\n\ntest : int NombreDe0AvantPositionKIter(Liste L, int K);\n\n");
+    k=-1;
+    printf("NombreDe0AvantPositionKIter (l2,%d)  = %d ",k ,NombreDe0AvantPositionKIter(l2,k)) ;printf("\n\n");
+    k=2;
+    printf("NombreDe0AvantPositionKIter (l2,%d)  = %d ",k ,NombreDe0AvantPositionKIter(l2,k)) ;printf("\n\n");
+    k=4;
+    printf("NombreDe0AvantPositionKIter (l2,%d)  = %d ",k ,NombreDe0AvantPositionKIter(l2,k)) ;printf("\n\n");
 
     
     
-    // 
-    printf("   \n");
+    // test : int NombreDe0ApresRetroPositionK(Liste L,int K);
+    printf ("\n\ntest : int NombreDe0ApresRetroPositionK(Liste L,int K);\n\n");
+    k=-1;
+    printf("NombreDe0ApresRetroPositionK (l2,%d)  = %d ",k ,NombreDe0ApresRetroPositionK(l2,k)) ;printf("\n\n");
+    k=2;
+    printf("NombreDe0ApresRetroPositionK (l2,%d)  = %d ",k ,NombreDe0ApresRetroPositionK(l2,k)) ;printf("\n\n");
+    k=4;
+    printf("NombreDe0ApresRetroPositionK (l2,%d)  = %d ",k ,NombreDe0ApresRetroPositionK(l2,k)) ;printf("\n\n");
 
-
-    // 
-    printf("   \n");
-
-
-
-    // 
-    printf("   \n");
-
-
-
-
-
-    // 
-    printf("   \n");
-
-
-
-
-    // 
-    printf("   \n");
+    
+    
+    
+    // test : Liste FctBegayeSimple(Liste l);
+    printf ("\n\ntest : Liste FctBegayeSimple(Liste l);\n\n");
+    int tbeg[] = {2,1,0,6,-2,8,8};
+    Liste lbeg = testBefore(tbeg,7);
+    Liste lres;
+    affichageTest(lbeg);
+    printf("FctBegayeSimple(Liste l) \n");
+    lres = FctBegayeSimple(lbeg);
+    affichageTest(lres);
 
 
 
-
-    // 
-    printf("   \n");
-
-
-
-
-    // 
-    printf("   \n");
-
-
-
-
-    // 
-    printf("   \n");
-
+    // test : Liste FctBegayeTerm(Liste l);
+    printf ("\n\ntest : Liste FctBegayeTerm(Liste l);\n\n");
+    affichageTest(lbeg);
+    printf("FctBegayeTerm(Liste l) \n");
+    lres = FctBegayeTerm(lbeg);
+    affichageTest(lres);
+    
+    
+    // test : Liste FctBegayeIter(Liste l);
+    printf ("\n\ntest : Liste FctBegayeIter(Liste l);\n\n");
+    affichageTest(lbeg);
+    printf("FctBegayeIter(Liste l) \n");
+    lres = FctBegayeIter(lbeg);
+    affichageTest(lres);
 
 
 
-    // 
-    printf("   \n");
+    // test : void ProcBegaye(Liste *L);
+    printf ("\n\ntest : void ProcBegaye(Liste *L);\n\n");
+    affichageTest(lbeg);
+    printf("ProcBegaye(Liste l) \n");
+    ProcBegaye(&lbeg);
+    affichageTest(lbeg);
+
+ 
 
 
 
-
-    // 
-    printf("   \n");
-
-
-
-
-    // 
-    printf("   \n");
-
-
-
-
-    // 
-    printf("   \n");
-
-
-
-
-    // 
-    printf("   \n");
-
-
-
-
-    // 
-    printf("   \n");
+    // test retire : 
+    printf("\n\nvoid retire (Liste l, Bloc* p)  \n");
+    int tbis[] = {23,17,93,42};
+    Liste lbis = testBefore(t2,4);
+    affichageTest(lbis);
+    printf("retire(lbis,getptr(lbis,3)); \n");
+    retire(lbis,getptr(lbis,3));
+    affichageTest(lbis);
 
 
 

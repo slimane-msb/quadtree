@@ -143,7 +143,7 @@ ListeListe ATLTP(int n, ListeListe ll);
 ListeListe ATP (int n, Liste l);
 ListeListe AETTL (int n, ListeListe ll);
 
-void retire (Liste l, Bloc* p);
+void retire (Liste* l, Bloc* p);
 Bloc* getptr(Liste lbis, int n);
 void poup (Liste l);
 
@@ -656,23 +656,22 @@ ListeListe permutation (int n){
 /*************************************************/
 
 
-void retire (Liste l, Bloc* p){
-    if (estVide(l)) return;
-    else {
-        if (l->pred==p){
-            l->suivant->pred = l->pred;
-            l->pred->suivant = l->suivant;
+void retire (Liste* l, Bloc* p){
+    if (!estVide(*l)) {
+        if ((*l)==p){
+            (*l)->pred->suivant = (*l)->suivant;
+            (*l)->suivant->pred = (*l)->pred;
             free(l);
             return;
         }else{
-            retire(suite(l),p);
+            retire(&((*l)->suivant),p);
         }
     }
 }
 
 // getprt(lbis,-1) = premier ptr, getptr(lbis,n>len)= null 
 Bloc* getptr(Liste lbis, int n){
-    if (n>=1 || estVide(lbis)) return lbis; 
+    if (n<=1 || estVide(lbis)) return lbis; 
     else return getptr(suite(lbis),n-1);
 }
 
@@ -902,14 +901,19 @@ int main(int argc, char** argv)
  
 
 
+    
+
 
     // test retire : 
     printf("\n\nvoid retire (Liste l, Bloc* p)  \n");
     int tbis[] = {23,17,93,42};
     Liste lbis = testBefore(t2,4);
     affichageTest(lbis);
+            // test getptr
+            int posk=3; 
+            printf ("\tgetptr(%d).value=%d\n", posk, (getptr(lbis,posk))->nombre);
     printf("retire(lbis,getptr(lbis,3)); \n");
-    retire(lbis,getptr(lbis,3));
+    retire(&lbis,getptr(lbis,3));
     affichageTest(lbis);
 
 

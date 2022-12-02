@@ -1,4 +1,3 @@
-// todo: recopier les signature avant toutes les fonctions 
 #include <stdio.h>
 #include <stdlib.h>
 

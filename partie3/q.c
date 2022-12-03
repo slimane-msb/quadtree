@@ -83,19 +83,6 @@ image construitNoir (){
     return res ; 
 }
 
-bool estBlanc(image i){
-    return i==NULL; 
-}
-
-bool sontFilsNull( bloc_image** fils){
-    return fils[0]==NULL && fils[1]==NULL &&fils[2]==NULL &&fils[3]==NULL ; // on suppose une compilation paresseuse
-}
-
-bool estNoir(image i){
-    if(i!=NULL) return ( i->toutnoir == TRUE ) && sontFilsNull(i->fils); // si on a bien creer les images | toutnoi == true suffit, mais on verifier quand les fils, car c'est rapide pour tester si c'est null 
-    return FALSE ; 
-}
-
 image construitComposee( image i0, image i1, image i2, image i3){
     if ((estBlanc(i0))&&(estBlanc(i1))&&(estBlanc(i3))&&(estBlanc(i3))) return construitBlanc();
     // else 
@@ -195,6 +182,53 @@ image getImageTxt(char* t, int d, int f){
         }
     }
     return construitComposee(imgT[0],imgT[1],imgT[2],imgT[3]); 
+}
+
+
+bool estBlancSimple(image i){
+    return i==NULL; 
+}
+
+bool sontFilsNull( bloc_image** fils){
+    return fils[0]==NULL && fils[1]==NULL &&fils[2]==NULL &&fils[3]==NULL ; // on suppose une compilation paresseuse
+}
+
+bool estNoirSimple(image i){
+    if(i!=NULL) return ( i->toutnoir == TRUE ) && sontFilsNull(i->fils); // si on a bien creer les images | toutnoi == true suffit, mais on verifier quand les fils, car c'est rapide pour tester si c'est null 
+    return FALSE ; 
+}
+
+
+
+
+
+
+bool estBlanche(image im){
+    if (estBlancSimple(im)) return TRUE;
+    // si bien formee: return im->toutnoir == FALSE ;  
+    return (im->toutnoir==FALSE) && estBlanche(im->fils[0])&& estBlanche(im->fils[1])&& estBlanche(im->fils[2])&& estBlanche(im->fils[3]); 
+
+}
+
+bool estNoire(image im) {
+    return (NOT estBlanche(im)); 
+}
+
+/*
+
+
+if p = 0 then rendre imNoire
+else p=1 then rendre construireimage(rec(p-1)bbrec(p-1))
+
+
+
+*/
+
+
+image diagonale(int p) {
+    if (p==0) return construitNoir(); 
+    // else 
+    return construitComposee(diagonale(p-1),construitBlanc(),construitBlanc(), diagonale(p-1));  
 }
 
 

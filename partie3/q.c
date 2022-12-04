@@ -185,20 +185,39 @@ image getImageTxt(char* t, int d, int f){
 }
 
 
-bool estBlancSimple(image i){
-    return i==NULL; 
+
+
+
+
+
+// Bien Forme :  estBlancheBienForme: supposant que BBBB ce simplifie en B et NNNN en N et que le bool fonctionne bien 
+bool estBlancheBF(image im){
+    return im==NULL; 
+}
+bool estNoireBF(image im){
+    if(estBlancheBF(im)) return FALSE; 
+    // else (soit noire soit composee )
+    return im->toutNoire; 
 }
 
-bool sontFilsNull( bloc_image** fils){
-    return fils[0]==NULL && fils[1]==NULL &&fils[2]==NULL &&fils[3]==NULL ; // on suppose une compilation paresseuse
+// Non Formee : 
+bool estBlancheNF(image im){
+    if(im==NULL) return TRUE; 
+    return estBlancheNF(im->fils[0]) && estBlancheNF(im->fils[1]) && estBlancheNF(im->fils[2]) && estBlancheNF(im->fils[3]) ; 
 }
 
-bool estNoirSimple(image i){
-    if(i!=NULL) return ( i->toutnoir == TRUE ) && sontFilsNull(i->fils); // si on a bien creer les images | toutnoi == true suffit, mais on verifier quand les fils, car c'est rapide pour tester si c'est null 
-    return FALSE ; 
+bool estNoireNF(image im){
+    if(im==NULL) return FALSE; 
+    return estNoireNF(im->fils[0]) && estNoireNF(im->fils[1]) && estNoireNF(im->fils[2]) && estNoireNF(im->fils[3]) ; 
 }
 
+bool filsNoir(image im){
+    return estNoireBF(im->fils[0]) && estNoireBF(im->fils[1]) && estNoireBF(im->fils[2]) && estNoireBF(im->fils[3]) ; 
+}
 
+bool filsBlanc(image im){
+    return estBlancheBF(im->fils[0]) && estBlancheBF(im->fils[1]) && estBlancheBF(im->fils[2]) && estBlancheBF(im->fils[3]) ; 
+}
 
 
 
@@ -210,9 +229,6 @@ bool estBlanche(image im){
 
 }
 
-bool estNoire(image im) {
-    return (NOT estBlanche(im)); 
-}
 
 /*
 
@@ -230,6 +246,89 @@ image diagonale(int p) {
     // else 
     return construitComposee(diagonale(p-1),construitBlanc(),construitBlanc(), diagonale(p-1));  
 }
+
+
+
+
+
+image quartDeTour( image im) {
+	if(estBlanche(im)) return im ; 
+	if(estNoire(im)) return im ; 
+	// else 
+	return construitComposee(quartDeTour(im->fils[0]),quartDeTour(im->fils[1]),quartDeTour(im->fils[2]),quartDeTour(im->fils[3])); 
+	
+// je vois pas trop c'est quoi transformer une image en image negative 
+
+void simplifieProfP(image* im, int p ){
+    if(p==0) simplifie(im);
+    else {
+        for (int i=0; i<4; i++){
+            simplifieProfP(&((*im)->fils[i])), p-1) 
+        }
+    }
+}
+
+
+
+
+// im NF: 
+void simplifie(image* im){
+    if (*im == NULL) return ; 
+    for (int i=0; i<4; i++) simplifie(&((*im)->fils[0]); 
+    // a partir de la les fils sont bien formee: 
+    if (filsNoir(*im)){
+        for (int i=0; i<4; i++) detruire(&((*im)->fils[i])); 
+        (*im)->toutNoire = true ; 
+        return ; 
+    }
+    if ( (NOT (*im)->toutNoire)   && filsBlanc(*im)){
+        detruire(im); 
+        return ; 
+    }
+}
+
+bool sontToutesBlanches(image im) {
+    if (im==NULL) return TRUE; 
+    // else 
+    return sontToutesBlanches(im->fils[0]) &&  sontToutesBlanches(im->fils[1]) &&  sontToutesBlanches(im->fils[2]) &&  sontToutesBlanches(im->fils[3]) ; 
+}
+
+bool sontToutesNoire(image im) {
+    if (im==NULL) return FALSE; 
+    // else // return im->toutNoire; 
+    return sontToutesNoire(im->fils[0]) &&  sontToutesNoire(im->fils[1]) &&  sontToutesNoire(im->fils[2]) &&  sontToutesNoire(im->fils[3]) ; 
+}
+
+
+void detruire(image* im){
+    if(im != NULL && *im !=NULL){
+        for (int i=0 ; i<4; i++) detruire(&((*im)->fils[i])); 
+        free(im); 
+    }
+}
+
+
+// elle fait quoi incluse : ? 
+
+
+int hautMaxBlanc( image im) {
+    if (im==NULL) return 0; 
+    // else 
+    if (NOT im->toutNoire)
+    // else 
+    if (im->toutNoire) return -1; 
+    // else 
+    hmb0 = hautMaxBlanc(im->fils[0]); 
+    hmb1 = hautMaxBlanc(im->fils[1]); 
+    hmb2 = hautMaxBlanc(im->fils[2]); 
+    hmb3 = hautMaxBlanc(im->fils[3]); 
+    return (max(hmb0, hmb1, hmb2, hmb3) +1); 
+}
+
+
+
+
+
 
 
 

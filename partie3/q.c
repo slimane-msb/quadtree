@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 /*************************************************/
 /*                                               */
@@ -256,32 +257,39 @@ image quartDeTour( image im) {
 	if(estNoire(im)) return im ; 
 	// else 
 	return construitComposee(quartDeTour(im->fils[0]),quartDeTour(im->fils[1]),quartDeTour(im->fils[2]),quartDeTour(im->fils[3])); 
-	
-// je vois pas trop c'est quoi transformer une image en image negative 
+}
+
+
+
+image negative(image im){
+    if (estBlancheBF(im)) return construitNoir();
+    // else soit noire ou construite 
+    if (estNoireBF(im)) return construitBlanc();
+    // else consutruite : 
+    return construitComposee(negative(im->fils[0]), negative(im->fils[1]), negative(im->fils[2]), negative(im->fils[3])) ; 
+    
+}
 
 void simplifieProfP(image* im, int p ){
     if(p==0) simplifie(im);
     else {
         for (int i=0; i<4; i++){
-            simplifieProfP(&((*im)->fils[i])), p-1) 
+            simplifieProfP((&((*im)->fils[i])), p-1) ; 
         }
     }
 }
 
-
-
-
 // im NF: 
 void simplifie(image* im){
     if (*im == NULL) return ; 
-    for (int i=0; i<4; i++) simplifie(&((*im)->fils[0]); 
+    for (int i=0; i<4; i++) simplifie(&((*im)->fils[0])); 
     // a partir de la les fils sont bien formee: 
     if (filsNoir(*im)){
         for (int i=0; i<4; i++) detruire(&((*im)->fils[i])); 
-        (*im)->toutNoire = true ; 
+        (*im)->toutnoir = TRUE ; 
         return ; 
     }
-    if ( (NOT (*im)->toutNoire)   && filsBlanc(*im)){
+    if ( (NOT (*im)->toutnoir)   && filsBlanc(*im)){
         detruire(im); 
         return ; 
     }
@@ -307,25 +315,114 @@ void detruire(image* im){
     }
 }
 
+/*
 
-// elle fait quoi incluse : ? 
+traitement de cas : 
+    im1    N    B      4
+    im2 
+    N      t    f      4=N
+    B      f    t       4=B 
+    4      4=N  4=B     im1, img2[0] || ...3|| in moitite 
 
+in moitie = 
+    todo 
+*/
+bool incluse(image im1, image im2){
+    if (estBlancheNF(im2)) return estBlancheNF(im1);
+    if (estNoireNF(im2)) return estNoireNF(im1); 
+    // else im2 construite: 
+    return incluse(im1, im2->fils[0]) ||  incluse(im1, im2->fils[1]) ||  incluse(im1, im2->fils[2]) ||  incluse(im1, im2->fils[3]) || incluseComposee(im1,im2); 
+}
+
+
+bool incluseComposee( image im1, image im2){
+    return FALSE; // todo 
+}
 
 int hautMaxBlanc( image im) {
     if (im==NULL) return 0; 
-    // else 
-    if (NOT im->toutNoire)
-    // else 
-    if (im->toutNoire) return -1; 
-    // else 
-    hmb0 = hautMaxBlanc(im->fils[0]); 
-    hmb1 = hautMaxBlanc(im->fils[1]); 
-    hmb2 = hautMaxBlanc(im->fils[2]); 
-    hmb3 = hautMaxBlanc(im->fils[3]); 
+    // else soit noir ou composee 
+    if (im->toutnoir) return -1; 
+    // else composee : 
+    int hmb0 = hautMaxBlanc(im->fils[0]); 
+    int hmb1 = hautMaxBlanc(im->fils[1]); 
+    int hmb2 = hautMaxBlanc(im->fils[2]); 
+    int hmb3 = hautMaxBlanc(im->fils[3]); 
     return (max(hmb0, hmb1, hmb2, hmb3) +1); 
 }
 
 
+int max ( int a, int b, int c, int d){
+    return max2(max2(a,b),max2(c,d)); 
+}
+
+int max2(int a, int b){
+    if (a<b) return b;
+    return a; 
+}
+
+
+
+
+
+/*
+
+c correspond a fils[c ]
+
+
+*/
+
+void blanchitProfPCase(image* im, int p, int x, int y, int taille ){
+    if(*im == NULL) return; // deja bon
+    if (p==0) { // il faut blanchir la fils[c] 
+        // cas blanche deja teste 
+        // else 
+        int fils ; 
+        if ((x==1) && (y==1 || y==0)) fils = y;
+        else if ((x==0) && (y==1 || y==0)) fils = y+3; 
+        else return; 
+        detruire( (*im)->fils[fils]);
+        // (*im)->fils[c] = NULL; // blanchir le fils c  :: ==NULL deja fait dans detruire 
+    }
+    if (p>0) {
+        // cas blanche deja teste 
+        int c; 
+        int l; 
+        int newTaille = taille/2; 
+        if (x<taille/2) c = 0 ; 
+        else c=1; 
+        if (y<taille/2) l = 0 ; 
+        else {
+            l=1;
+            y = y-taille/2; 
+        }
+        int fils ; 
+        if (l==1) fils = c; 
+        else fils = 3+c;  
+        blanchitProfPCase((*im)->fils[fils], p-1, x, y, newTaille); 
+    }
+}
+
+
+void blanchitProfP(image* im, int p, int x, int y){
+    int taille = pow(2,p); 
+    blanchitProfPCase(im, p, x, y, taille);
+}
+
+
+image chute(image im) {
+    if (estBlancheNF(im)) return im; 
+    return construitComposee(construitBlanc(), construitBlanc(), unionNoir(chute(im->fils[0]),chute(im->fils[3])),  unionNoir(chute(im->fils[2]),chute(im->fils[4]))) ; 
+}
+
+image unionNoir(image im1, image im2){
+    if(estBlancheNF(im1)) return im2;
+    if (estNoireNF(im1)) return im1; 
+    // else composee 
+    if (estBlancheNF(im2)) return im1; 
+    return construitComposee(unionNoir(im1->fils[0], im2->fils[0]), unionNoir(im1->fils[1], im2->fils[1]), unionNoir(im1->fils[2], im2->fils[2]), unionNoir(im1->fils[3], im2->fils[3])   ); 
+
+}
 
 
 

@@ -60,8 +60,40 @@ typedef bloc_image* image;
 /*                                               */
 /*************************************************/
 
-// a la fin 
 
+image construitBlanc();
+image construitNoir ();
+image construitComposee( image i0, image i1, image i2, image i3);
+void afficheNoir(); 
+void afficheBlanc(); 
+void afficheInt(int i);
+void afficheNormalRL(image im);
+void afficheNormal( image im);
+void afficheProfondeurAux( image im, int prof);
+image Lecture();
+image lecture(char*s);
+image lecture_aux(char* s, int* cur);
+bool estBlanche(image im);
+bool estNoire(image im);
+bool estBlancheBF(image im);
+bool estNoireBF(image im);
+bool filsNoir(image im);
+bool filsBlanc(image im);
+image diagonale(int p) ;
+image quartDeTour( image im) ;
+void SimplifieProfP(image *img,int p);
+bool sontToutesBlanches(image im) ;
+bool sontToutesNoire(image im) ;
+void detruire(image* im);
+bool incluse(image im1, image im2);
+bool incluseComposee( image im1, image im2);
+int hautMaxBlanc( image im) ;
+int max ( int a, int b, int c, int d);
+int max2(int n, int m);
+void blanchitProfPCase(image* im, int p, int x, int y, int taille );
+void blanchitProfP(image* im, int p, int x, int y);
+image chute(image im) ;
+image unionNoir(image im1, image im2);
 
 
 /*************************************************/
@@ -75,8 +107,7 @@ image construitBlanc(){
 
 
 image construitNoir (){
-    image res = malloc(sizeof(bloc_image)); 
-    (res->fils) = malloc(4*sizeof(image)); // car fils est du type bloc_image** est donc just un pointeur, alors il faut malloc les case des 4 pointeur;  
+    image res = (image) malloc(sizeof(bloc_image)); 
     res->toutnoir = TRUE; 
     for (int i=0 ; i<4; i++){
         (res->fils)[i] = NULL; 
@@ -85,12 +116,12 @@ image construitNoir (){
 }
 
 image construitComposee( image i0, image i1, image i2, image i3){
-    if ((estBlanc(i0))&&(estBlanc(i1))&&(estBlanc(i3))&&(estBlanc(i3))) return construitBlanc();
+    image img =  (image) malloc(sizeof(bloc_image));
+    if (((i0)==NULL)&&((i1)==NULL)&&((i3)==NULL)&&((i3)==NULL)) return construitBlanc();
     // else 
-    if ((estNoir(i0))&&(estNoir(i1))&&(estNoir(i3))&&(estNoir(i3))) return construitNoir(); // peut etre ganger quelque comparaisons 
+    if (((i0)->toutnoir)&&(estNoireBF(i1))&&(estNoireBF(i3))&&(estNoireBF(i3))) return construitNoir();
     // else 
     image res = malloc (sizeof(bloc_image)); 
-    (res->fils) = malloc(4*sizeof(image)); 
     res->toutnoir = FALSE; 
     (res->fils)[0] = i0 ; (res->fils)[1] = i1 ; (res->fils)[2] = i2 ; (res->fils)[3] = i3 ; 
     return res; 
@@ -108,9 +139,14 @@ void afficheInt(int i){
     printf("%d",i);
 }
 
+void afficheNormalRL(image im){
+    afficheNormal(im);
+    printf("\n");
+}
+
 void afficheNormal( image im){
-    if (estBlanc(im)) { afficheBlanc() ; return; } 
-    if (estNoir(im)) { afficheNoir(); return ; }  
+    if ((im)==NULL) { afficheBlanc() ; return; } 
+    if ((im)->toutnoir) { afficheNoir(); return ; }  
     // else 
     printf("("); 
     afficheNormal(im->fils[0]); 
@@ -126,8 +162,8 @@ void afficheProfondeur(image im){
 }
 
 void afficheProfondeurAux( image im, int prof){
-    if (estBlanc(im)) { afficheBlanc(); afficheInt(prof)  ; return; } 
-    if (estNoir(im)) { afficheNoir(); afficheInt(prof) ; return ; }  
+    if ((im)==NULL) { afficheBlanc(); afficheInt(prof)  ; return; } 
+    if ((im)->toutnoir) { afficheNoir(); afficheInt(prof) ; return ; }  
     // else 
     printf("("); 
     afficheProfondeurAux(im->fils[0], prof+1); 
@@ -137,98 +173,106 @@ void afficheProfondeurAux( image im, int prof){
     printf(")");  
 }
 
-// clavier 
-image lecture(){
-    char * txt[1000];
-    scanf("%s", txt); 
-    return getImageTxt(txt, 0, strlen(txt)-1); 
-}
-
- 
-// image de :  B ou N : 
-image getImageSimpleTxt(char t){
-    if (t == "N" ) return construitNoir();
-    if (t == "B") return construitBlanc();
-    return EXIT_FAILURE; 
-}
-
-//image de : t=  ( N (BBNB) (NBBN) N )   d=0 f=len(t)-1 
-image getImageTxt(char* t, int d, int f){
-    if (d==f) return getImageSimpleTxt(t[d]); 
-    if ((t[d]!='(') || (t[f]!=')') ) return EXIT_FAILURE; 
-    // else cas : // (NBBN)
-    if ((d-f)==4) return construitComposee( 
-                            getImageSimpleTxt(t[d+1]),
-                            getImageSimpleTxt(t[d+2]),
-                            getImageSimpleTxt(t[d+3]),
-                            getImageSimpleTxt(t[d+4])); 
-    // else  cas : ( N (BBNB) (NBBN) N ) 
-    image* imgT[4]; 
-    int imageIndex =0; 
-    for (int i=d+1; i<f; i++){ // d=(  f=)
-        if (t[i]!='('){ 
-            imgT[imageIndex] = getImageSimpleTxt(t[i]); 
-            imageIndex++;
-        }else {
-            int s = i ; 
-            int e = i ; 
-            int p = 1; 
-            while (p!=0 && e<f)
-            {
-                if (t[i]=='(' ) p++;
-                if (t[i]==')' ) p--; 
-                e++; 
-            }
-            imgT[imageIndex] = getImageTxt(t, s, e);
-        }
+// avec lecture clavier ; 
+image Lecture(){
+    char c = getchar();
+    if (c == 'B'){
+        return construitBlanc();
     }
-    return construitComposee(imgT[0],imgT[1],imgT[2],imgT[3]); 
+    else if (c == 'N')
+    {
+        return construitNoir();
+    }
+    else if (c == '('){
+        image i1 = Lecture();
+        image i2 = Lecture();
+        image i3 = Lecture();
+        image i4 = Lecture();
+        return construitComposee(i1,i2,i3,i4);
+    }
+    else {
+        return Lecture();
+    }
+} 
+
+
+// a partir de char* :: string  ; 
+image lecture(char*s){
+    int cur=-1; 
+    return lecture_aux(s, &cur); 
 }
 
 
+// specification: chaine bien formee : 
+image lecture_aux(char* s, int* cur){
+    *cur+=1 ; // get char : 
+    if (s[*cur] == 'B'){
+        return construitBlanc();
+    }
+    else if (s[*cur] == 'N')
+    {
+        return construitNoir();
+    }
+    else if (s[*cur] == '('){
+        image i1 = lecture_aux(s, cur);
+        image i2 = lecture_aux(s, cur);
+        image i3 = lecture_aux(s, cur);
+        image i4 = lecture_aux(s, cur);
+        return construitComposee(i1,i2,i3,i4);
+    }
+    else {
+        return lecture_aux(s, cur);
+    }
+} 
 
 
 
 
+
+
+
+
+
+
+
+// Non Formee : 
+bool estBlanche(image im){
+    if(im==NULL) return TRUE; 
+    else if (im->toutnoir) return FALSE; 
+    return estBlanche(im->fils[0]) && estBlanche(im->fils[1]) &&
+           estBlanche(im->fils[2]) && estBlanche(im->fils[3]) ; 
+}
+
+bool estNoire(image im){
+    if(im==NULL) return FALSE; 
+    else if (im->toutnoir) return TRUE; 
+    return estNoire(im->fils[0]) && estNoire(im->fils[1]) && 
+           estNoire(im->fils[2]) && estNoire(im->fils[3]) ; 
+}
 
 // Bien Forme :  estBlancheBienForme: supposant que BBBB ce simplifie en B et NNNN en N et que le bool fonctionne bien 
 bool estBlancheBF(image im){
     return im==NULL; 
 }
 bool estNoireBF(image im){
-    if(estBlancheBF(im)) return FALSE; 
+    if((im)==NULL) return FALSE; 
     // else (soit noire soit composee )
-    return im->toutNoire; 
+    return im->toutnoir; 
 }
 
-// Non Formee : 
-bool estBlancheNF(image im){
-    if(im==NULL) return TRUE; 
-    return estBlancheNF(im->fils[0]) && estBlancheNF(im->fils[1]) && estBlancheNF(im->fils[2]) && estBlancheNF(im->fils[3]) ; 
-}
-
-bool estNoireNF(image im){
-    if(im==NULL) return FALSE; 
-    return estNoireNF(im->fils[0]) && estNoireNF(im->fils[1]) && estNoireNF(im->fils[2]) && estNoireNF(im->fils[3]) ; 
-}
 
 bool filsNoir(image im){
-    return estNoireBF(im->fils[0]) && estNoireBF(im->fils[1]) && estNoireBF(im->fils[2]) && estNoireBF(im->fils[3]) ; 
+    return estNoireBF(im->fils[0]) && estNoireBF(im->fils[1]) && 
+           estNoireBF(im->fils[2]) && estNoireBF(im->fils[3]) ; 
 }
 
 bool filsBlanc(image im){
-    return estBlancheBF(im->fils[0]) && estBlancheBF(im->fils[1]) && estBlancheBF(im->fils[2]) && estBlancheBF(im->fils[3]) ; 
+    return estBlancheBF(im->fils[0]) && estBlancheBF(im->fils[1]) && 
+           estBlancheBF(im->fils[2]) && estBlancheBF(im->fils[3]) ; 
 }
 
 
 
-
-bool estBlanche(image im){
-    if (estBlancSimple(im)) return TRUE;
-    // si bien formee: return im->toutnoir == FALSE ;  
-    return (im->toutnoir==FALSE) && estBlanche(im->fils[0])&& estBlanche(im->fils[1])&& estBlanche(im->fils[2])&& estBlanche(im->fils[3]); 
-
-}
 
 
 /*
@@ -236,8 +280,6 @@ bool estBlanche(image im){
 
 if p = 0 then rendre imNoire
 else p=1 then rendre construireimage(rec(p-1)bbrec(p-1))
-
-
 
 */
 
@@ -250,50 +292,69 @@ image diagonale(int p) {
 
 
 
-
-
 image quartDeTour( image im) {
-	if(estBlanche(im)) return im ; 
-	if(estNoire(im)) return im ; 
+	if((im)==NULL || im->toutnoir ) return im ; 
 	// else 
-	return construitComposee(quartDeTour(im->fils[0]),quartDeTour(im->fils[1]),quartDeTour(im->fils[2]),quartDeTour(im->fils[3])); 
+	return construitComposee(quartDeTour(im->fils[2]),quartDeTour(im->fils[0]),quartDeTour(im->fils[3]),quartDeTour(im->fils[1])); 
 }
 
 
 
-image negative(image im){
-    if (estBlancheBF(im)) return construitNoir();
-    // else soit noire ou construite 
-    if (estNoireBF(im)) return construitBlanc();
-    // else consutruite : 
-    return construitComposee(negative(im->fils[0]), negative(im->fils[1]), negative(im->fils[2]), negative(im->fils[3])) ; 
-    
-}
-
-void simplifieProfP(image* im, int p ){
-    if(p==0) simplifie(im);
-    else {
-        for (int i=0; i<4; i++){
-            simplifieProfP((&((*im)->fils[i])), p-1) ; 
-        }
+void Negatif(image *img){
+    if ((*img) == NULL){
+        (*img) = construitNoir();
     }
+    else if ((*img)->toutnoir )
+        (*img) = construitBlanc();
+    else
+    {
+        Negatif(&((*img)->fils[0]));
+        Negatif(&((*img)->fils[1]));
+        Negatif(&((*img)->fils[2]));
+        Negatif(&((*img)->fils[3]));
+    }    
 }
+
 
 // im NF: 
-void simplifie(image* im){
-    if (*im == NULL) return ; 
-    for (int i=0; i<4; i++) simplifie(&((*im)->fils[0])); 
-    // a partir de la les fils sont bien formee: 
-    if (filsNoir(*im)){
-        for (int i=0; i<4; i++) detruire(&((*im)->fils[i])); 
-        (*im)->toutnoir = TRUE ; 
-        return ; 
+
+
+
+void SimplifieProfP(image *img,int p){
+/*     if (img == NULL){
+        return TRUE; 
     }
-    if ( (NOT (*im)->toutnoir)   && filsBlanc(*im)){
-        detruire(im); 
-        return ; 
+    else if (img->toutnoir){
+        return FALSE;
     }
+    else {
+        return estBlanche(img->fils[0]) && estBlanche(img->fils[1]) 
+        && estBlanche(img->fils[2]) && estBlanche(img->fils[3]) ;
+    } */
+    if (p == 0){
+        if (estBlanche(*img)){
+            detruire(img);
+            *img = construitBlanc();
+        }
+
+        else if (estNoire(*img)){
+            detruire(img);
+            *img = construitNoir();
+        }
+    }
+    else  {
+        p--;
+        if ( !((*img) == NULL || (*img)->toutnoir)){
+            SimplifieProfP(&((*img)->fils[0]),p);
+            SimplifieProfP(&((*img)->fils[1]),p);
+            SimplifieProfP(&((*img)->fils[2]),p);
+            SimplifieProfP(&((*img)->fils[3]),p);
+        }
+
+    }    
 }
+
+
 
 bool sontToutesBlanches(image im) {
     if (im==NULL) return TRUE; 
@@ -328,8 +389,8 @@ in moitie =
     todo 
 */
 bool incluse(image im1, image im2){
-    if (estBlancheNF(im2)) return estBlancheNF(im1);
-    if (estNoireNF(im2)) return estNoireNF(im1); 
+    if (estBlanche(im2)) return estBlanche(im1);
+    if (estNoire(im2)) return estNoire(im1); 
     // else im2 construite: 
     return incluse(im1, im2->fils[0]) ||  incluse(im1, im2->fils[1]) ||  incluse(im1, im2->fils[2]) ||  incluse(im1, im2->fils[3]) || incluseComposee(im1,im2); 
 }
@@ -348,7 +409,8 @@ int hautMaxBlanc( image im) {
     int hmb1 = hautMaxBlanc(im->fils[1]); 
     int hmb2 = hautMaxBlanc(im->fils[2]); 
     int hmb3 = hautMaxBlanc(im->fils[3]); 
-    return (max(hmb0, hmb1, hmb2, hmb3) +1); 
+    if(estBlanche(im)) return (max(hmb0, hmb1, hmb2, hmb3) +1);
+    else return (max(hmb0, hmb1, hmb2, hmb3)); 
 }
 
 
@@ -356,9 +418,8 @@ int max ( int a, int b, int c, int d){
     return max2(max2(a,b),max2(c,d)); 
 }
 
-int max2(int a, int b){
-    if (a<b) return b;
-    return a; 
+int max2(int n, int m){
+    return n > m ? n : m;
 }
 
 
@@ -381,7 +442,7 @@ void blanchitProfPCase(image* im, int p, int x, int y, int taille ){
         if ((x==1) && (y==1 || y==0)) fils = y;
         else if ((x==0) && (y==1 || y==0)) fils = y+3; 
         else return; 
-        detruire( (*im)->fils[fils]);
+        detruire( &((*im)->fils[fils]));
         // (*im)->fils[c] = NULL; // blanchir le fils c  :: ==NULL deja fait dans detruire 
     }
     if (p>0) {
@@ -411,17 +472,16 @@ void blanchitProfP(image* im, int p, int x, int y){
 
 
 image chute(image im) {
-    if (estBlancheNF(im)) return im; 
+    if (estBlanche(im)) return im; 
     return construitComposee(construitBlanc(), construitBlanc(), unionNoir(chute(im->fils[0]),chute(im->fils[3])),  unionNoir(chute(im->fils[2]),chute(im->fils[4]))) ; 
 }
 
 image unionNoir(image im1, image im2){
-    if(estBlancheNF(im1)) return im2;
-    if (estNoireNF(im1)) return im1; 
+    if(estBlanche(im1)) return im2;
+    if (estNoire(im1)) return im1; 
     // else composee 
-    if (estBlancheNF(im2)) return im1; 
+    if (estBlanche(im2)) return im1; 
     return construitComposee(unionNoir(im1->fils[0], im2->fils[0]), unionNoir(im1->fils[1], im2->fils[1]), unionNoir(im1->fils[2], im2->fils[2]), unionNoir(im1->fils[3], im2->fils[3])   ); 
-
 }
 
 
@@ -449,3 +509,58 @@ image unionNoir(image im1, image im2){
 /*************************************************/
 
 // a la fin 
+
+int main(int argc, char const *argv[])
+{
+    image img = construitComposee(construitBlanc(),construitNoir(),construitNoir(),construitBlanc());
+    image img2 = construitComposee(construitNoir(),construitBlanc(),img,construitNoir());
+    image img3 = construitComposee(construitNoir(),construitBlanc(),construitBlanc(),img2);
+    afficheProfondeur(img3); 
+     image img  = construitComposee(construitNoir(),construitNoir(),construitNoir(),
+        construitComposee(construitNoir(),construitNoir(),
+        construitComposee(construitNoir(),construitNoir(),construitNoir(),construitNoir()), construitNoir()));
+    printBool(estNoire(img)); 
+
+     image img = diagonale(0);
+    afficheNormal(img); 
+     Negatif(&img3);
+    afficheNormal(img3);
+    printf("\n"); 
+     char *str = "(N(BBNN)(BBNN)N)";
+    printf("%s\n",str);  
+    //image img = construitNoir();
+     image img = construitComposee(construitComposee(construitBlanc(),construitNoir(),construitNoir(),construitNoir()),
+                        construitBlanc(),construitComposee(construitNoir(),construitNoir(),construitBlanc(),construitBlanc()),construitNoir());
+    quartDeTour(&img);
+    afficheNormal(img); 
+     image img2 = construitComposee(construitNoir(),
+    construitComposee(construitBlanc(),construitNoir(),construitNoir(),construitNoir()),
+    construitComposee(construitBlanc(),construitBlanc(),construitNoir(),construitNoir()),construitNoir());
+    image img = Lecture();
+    affichage_Profondeur(img2);
+    affichage_Profondeur(img);
+ 
+     image i1 = construitComposee(construitNoir(),construitBlanc(),construitComposee(construitNoir(),construitNoir(),
+    construitComposee(construitNoir(),construitNoir(),construitNoir(),construitNoir())
+    ,construitNoir())
+    ,construitBlanc());
+
+    image i2 = construitComposee(construitNoir(),construitBlanc(),construitNoir(),
+    construitComposee(construitNoir(),construitBlanc(),construitNoir(),
+    construitComposee(construitBlanc(),construitBlanc(),construitBlanc(),construitBlanc())));
+
+    image i3 = construitComposee(construitBlanc(),construitBlanc(),
+    construitComposee(construitBlanc(),construitBlanc(),construitBlanc(),construitBlanc()),construitBlanc());
+    image img  = construitComposee(construitNoir(),i1,i2,i3);
+    //SimplifieProfP(&img,2);
+    afficheNormal(img); 
+ 
+    
+    image img = Lecture();
+     SimplifieProfP(&img,2);
+    afficheNormal(img); 
+    blanchitProfP(&img,2,1,3);
+    afficheNormal(img);
+
+    return 0;
+}

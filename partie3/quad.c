@@ -323,3 +323,59 @@ void BlanchitProfP(image *img,int p,int x,int y){
     }    
 
 }
+
+int main(int argc, char const *argv[])
+{
+     /*image img = Construit_Composee(Construit_Blanc(),Construit_Noir(),Construit_Noir(),Construit_Blanc());
+    image img2 = Construit_Composee(Construit_Noir(),Construit_Blanc(),img,Construit_Noir());
+    image img3 = Construit_Composee(Construit_Noir(),Construit_Blanc(),Construit_Blanc(),img2);
+    affichage_Profondeur(img3); */
+    /* image img  = Construit_Composee(Construit_Noir(),Construit_Noir(),Construit_Noir(),
+        Construit_Composee(Construit_Noir(),Construit_Noir(),
+        Construit_Composee(Construit_Noir(),Construit_Noir(),Construit_Noir(),Construit_Noir()), Construit_Noir()));
+    printBool(estNoire(img)); */
+
+    /* image img = Diagonale(0);
+    affichage_Normal(img); */
+    /* Negatif(&img3);
+    affichage_Normal(img3);
+    printf("\n"); */
+   /*  char *str = "(N(BBNN)(BBNN)N)";
+    printf("%s\n",str);  */
+    //image img = Construit_Noir();
+    /* image img = Construit_Composee(Construit_Composee(Construit_Blanc(),Construit_Noir(),Construit_Noir(),Construit_Noir()),
+                        Construit_Blanc(),Construit_Composee(Construit_Noir(),Construit_Noir(),Construit_Blanc(),Construit_Blanc()),Construit_Noir());
+    QuartDeTour(&img);
+    affichage_Normal(img); */
+    /* image img2 = Construit_Composee(Construit_Noir(),
+    Construit_Composee(Construit_Blanc(),Construit_Noir(),Construit_Noir(),Construit_Noir()),
+    Construit_Composee(Construit_Blanc(),Construit_Blanc(),Construit_Noir(),Construit_Noir()),Construit_Noir());
+    image img = Lecture();
+    affichage_Profondeur(img2);
+    affichage_Profondeur(img);
+ */
+    /* image i1 = Construit_Composee(Construit_Noir(),Construit_Blanc(),Construit_Composee(Construit_Noir(),Construit_Noir(),
+    Construit_Composee(Construit_Noir(),Construit_Noir(),Construit_Noir(),Construit_Noir())
+    ,Construit_Noir())
+    ,Construit_Blanc());
+
+    image i2 = Construit_Composee(Construit_Noir(),Construit_Blanc(),Construit_Noir(),
+    Construit_Composee(Construit_Noir(),Construit_Blanc(),Construit_Noir(),
+    Construit_Composee(Construit_Blanc(),Construit_Blanc(),Construit_Blanc(),Construit_Blanc())));
+
+    image i3 = Construit_Composee(Construit_Blanc(),Construit_Blanc(),
+    Construit_Composee(Construit_Blanc(),Construit_Blanc(),Construit_Blanc(),Construit_Blanc()),Construit_Blanc());
+    image img  = Construit_Composee(Construit_Noir(),i1,i2,i3);
+    //SimplifieProfP(&img,2);
+    affichage_Normal(img); 
+ */
+
+    
+    image img = Lecture();
+    /* SimplifieProfP(&img,2);
+    affichage_Normal(img); */
+    BlanchitProfP(&img,2,1,3);
+    affichage_Normal(img);
+
+    return 0;
+}

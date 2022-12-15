@@ -1,4 +1,4 @@
 # quadtree
 
 
-$ \forall  x.  \in S$
+$$ \forall x \in s$$

@@ -142,7 +142,19 @@ image construitNoir (){
     return res ; 
 }
 
-image construitComposee( image i0, image i1, image i2, image i3){
+
+
+image construitComposeeNS( image i0, image i1, image i2, image i3){
+    image img =  (image) malloc(sizeof(bloc_image));
+    img->toutnoir = FALSE ;
+    img->fils[0] = i0;
+    img->fils[1] = i1;
+    img->fils[2] = i2;
+    img->fils[3] = i3;
+    return img;
+}
+
+image construitComposee( image i0, image i1, image i2, image i3){ // %%% maybe put in comment on work on the right principle and have one function for everything 
     if (((i0)==NULL)&&((i1)==NULL)&&((i2)==NULL)&&((i3)==NULL)) 
         return construitBlanc();
     // else 
@@ -158,15 +170,6 @@ image construitComposee( image i0, image i1, image i2, image i3){
     return img; 
 }
 
-image construitComposeeNS( image i0, image i1, image i2, image i3){
-    image img =  (image) malloc(sizeof(bloc_image));
-    img->toutnoir = FALSE ;
-    img->fils[0] = i0;
-    img->fils[1] = i1;
-    img->fils[2] = i2;
-    img->fils[3] = i3;
-    return img;
-}
 
 
 
@@ -336,8 +339,10 @@ void Negatif(image *img){
     if ((*img) == NULL){
         (*img) = construitNoir();
     }
-    else if ((*img)->toutnoir )
+    else if ((*img)->toutnoir ){
+        // detruire(*img);  // %%% to fix 
         (*img) = construitBlanc();
+    }
     else
     {
         Negatif(&((*img)->fils[0]));
@@ -417,7 +422,7 @@ int hautMaxBlanc( image im) {
     hautMaxBlancAux(im, &blanche);
 }
 
-int hautMaxBlancAux( image im, bool* blanche ){
+int hautMaxBlancAux( image im, bool* blanche ){  //%%% optimise 
     if (im==NULL) return 0; 
     // else soit noir ou composee 
     if (estNoire(im)) {

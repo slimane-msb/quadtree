@@ -87,21 +87,20 @@ typedef bloc_image* image;
 image construitBlanc();
 image construitNoir ();
 image construitComposee( image i0, image i1, image i2, image i3);
-image construitComposeeNS( image i0, image i1, image i2, image i3);
+
 void afficheNormalRL(image im);
 void afficheNormal( image im);
 void afficheProfondeurAux( image im, int prof);
+
 image Lecture();
 image lecture(char*s);
 image lecture_aux(char* s, int* cur);
+
 bool estBlanche(image im);
 bool estNoire(image im);
-bool estBlancheBF(image im);
-bool estNoireBF(image im);
-// tq im est bien forme  
 bool filsNoir(image im);
-// tq im est bien forme
 bool filsBlanc(image im);
+
 image diagonale(int p) ;
 image quartDeTour( image im) ;
 void Negatif(image *img);
@@ -144,7 +143,7 @@ image construitNoir (){
 
 
 
-image construitComposeeNS( image i0, image i1, image i2, image i3){
+image construitComposee( image i0, image i1, image i2, image i3){
     image img =  (image) malloc(sizeof(bloc_image));
     img->toutnoir = FALSE ;
     img->fils[0] = i0;
@@ -154,21 +153,23 @@ image construitComposeeNS( image i0, image i1, image i2, image i3){
     return img;
 }
 
-image construitComposee( image i0, image i1, image i2, image i3){ // %%% maybe put in comment on work on the right principle and have one function for everything 
-    if (((i0)==NULL)&&((i1)==NULL)&&((i2)==NULL)&&((i3)==NULL)) 
-        return construitBlanc();
-    // else 
-    if ((estNoireBF(i0))&&(estNoireBF(i1))&&(estNoireBF(i2))&&(estNoireBF(i3))) 
-        return construitNoir();
-    // else 
-    image img =  (image) malloc(sizeof(bloc_image));
-    img->toutnoir = FALSE; 
-    (img->fils)[0] = i0 ; 
-    (img->fils)[1] = i1 ; 
-    (img->fils)[2] = i2 ; 
-    (img->fils)[3] = i3 ; 
-    return img; 
-}
+
+// %% to remove 
+// image construitComposee( image i0, image i1, image i2, image i3){ // %%% maybe put in comment on work on the right principle and have one function for everything 
+//     if (((i0)==NULL)&&((i1)==NULL)&&((i2)==NULL)&&((i3)==NULL)) 
+//         return construitBlanc();
+//     // else 
+//     if ((estNoire(i0))&&(estNoire(i1))&&(estNoire(i2))&&(estNoire(i3))) 
+//         return construitNoir();
+//     // else 
+//     image img =  (image) malloc(sizeof(bloc_image));
+//     img->toutnoir = FALSE; 
+//     (img->fils)[0] = i0 ; 
+//     (img->fils)[1] = i1 ; 
+//     (img->fils)[2] = i2 ; 
+//     (img->fils)[3] = i3 ; 
+//     return img; 
+// }
 
 
 
@@ -199,8 +200,8 @@ void afficheProfondeur(image im){
 }
 
 void afficheProfondeurAux( image im, int prof){
-    if (im==NULL) { printf("B %d",prof) ; return; } 
-    if (im->toutnoir) { printf("N %d",prof);  return ; }  
+    if (im==NULL) { printf("B%d",prof) ; return; } 
+    if (im->toutnoir) { printf("N%d",prof);  return ; }  
     // else 
     printf("("); 
     afficheProfondeurAux(im->fils[0], prof+1); 
@@ -287,26 +288,17 @@ bool estNoire(image im){
            estNoire(im->fils[2]) && estNoire(im->fils[3]) ; 
 }
 
-// Bien Forme :  estBlancheBienForme: supposant que BBBB ce simplifie en B et NNNN en N et que le 
-// bool fonctionne bien 
-bool estBlancheBF(image im){
-    return im==NULL; 
-}
-bool estNoireBF(image im){
-    if(im==NULL) return FALSE; 
-    // else (soit noire soit composee )
-    return im->toutnoir; 
-}
 
-
+// prend une image composee est rend vrai si tout les fils sont noirs 
 bool filsNoir(image im){
-    return estNoireBF(im->fils[0]) && estNoireBF(im->fils[1]) && 
-           estNoireBF(im->fils[2]) && estNoireBF(im->fils[3]) ; 
+    return estNoire(im->fils[0]) && estNoire(im->fils[1]) && 
+           estNoire(im->fils[2]) && estNoire(im->fils[3]) ; 
 }
 
+// prend une image composee est rend vrai si tout les fils sont blancs  
 bool filsBlanc(image im){
-    return estBlancheBF(im->fils[0]) && estBlancheBF(im->fils[1]) && 
-           estBlancheBF(im->fils[2]) && estBlancheBF(im->fils[3]) ; 
+    return estBlanche(im->fils[0]) && estBlanche(im->fils[1]) && 
+           estBlanche(im->fils[2]) && estBlanche(im->fils[3]) ; 
 }
 
 
@@ -465,9 +457,9 @@ c correspond a fils[c ]
 
 */
 
-void blanchitProfPCase(image* im, int p, int x, int y, int taille ){
-    if(*im == NULL) return; // deja bon
-    if (p==0) { // il faut blanchir la fils[c] 
+void blanchitProfPCaseTry(image* im, int p, int x, int y, int taille ){
+    if(*im == NULL) return; // deja bon ( car image blanche ) 
+    if (p==0) { // il faut blanchir le fils[c] 
         // cas blanche deja teste 
         // else 
         int fils ; 
@@ -492,6 +484,39 @@ void blanchitProfPCase(image* im, int p, int x, int y, int taille ){
         int fils ; 
         if (l==1) fils = c; 
         else fils = 3+c;  
+        blanchitProfPCaseTry(&((*im)->fils[fils]), p-1, x, y, newTaille); 
+    }
+}
+
+
+void blanchitProfPCase(image* im, int p, int x, int y, int taille ){
+    if(*im == NULL) return; // deja bon ( car image blanche ) 
+    if (p==0) { 
+        detruire( *im);
+        *im = NULL; 
+    }
+    else if (p>0) {
+        if ((*im)->toutnoir){
+            // detruire(*im); %% uncomment une fois detruire est reglee 
+            *im = construitComposee(construitNoir(),construitNoir(),construitNoir(),construitNoir());
+        }
+        // cas blanche deja teste 
+        int c; 
+        int l; 
+        int newTaille = taille/2; 
+        if (x<newTaille) c = 0 ; 
+        else {
+            c=1;
+            x = x-newTaille;  
+        }
+        if (y<newTaille) l = 0 ; 
+        else {
+            l=1;
+            y = y-newTaille; 
+        }
+        int fils ; 
+        if (l==1) fils = c; 
+        else fils = 2+c;  
         blanchitProfPCase(&((*im)->fils[fils]), p-1, x, y, newTaille); 
     }
 }
@@ -507,11 +532,11 @@ image chute(image im) {
     if (estBlanche(im)) 
         return im;
     if(estNoire(im)) 
-        return construitComposeeNS(construitBlanc(),construitBlanc(),im->fils[2], im->fils[3]) ; 
+        return construitComposee(construitBlanc(),construitBlanc(),im->fils[2], im->fils[3]) ; 
     image bg, bd; 
     bg = unionNoir(chute(im->fils[0]),chute(im->fils[3])); 
     bd = unionNoir(chute(im->fils[2]),chute(im->fils[4])); 
-    return construitComposeeNS(construitBlanc(), construitBlanc(), bg,  bd) ; 
+    return construitComposee(construitBlanc(), construitBlanc(), bg,  bd) ; 
 }
 
 image unionNoir(image im1, image im2){
@@ -545,10 +570,14 @@ void printnl(){
 image cc(image i1, image i2, image i3, image i4){
     return construitComposee(i1,i2,i3,i4); 
 }
-image cn(image i1, image i2, image i3, image i4){
-    return construitComposeeNS(i1,i2,i3,i4); 
+
+image b(){
+    return construitBlanc(); 
 }
 
+image n(){
+    return construitNoir(); 
+}
 
 
 
@@ -567,22 +596,22 @@ int main(int argc, char const *argv[])
     image B = construitBlanc();
     image N = construitNoir();
     // LES 16 PERMUTATION POSSIBLE 
-    image NBNN = construitComposeeNS(N, B, N, N); 
-    image NBNB = construitComposeeNS(N, B, N, B); 
-    image NBBN = construitComposeeNS(N, B, B, N); 
-    image NBBB = construitComposeeNS(N, B, B, B); 
-    image NNNN = construitComposeeNS(N, N, N, N); 
-    image NNNB = construitComposeeNS(N, N, N, B); 
-    image NNBN = construitComposeeNS(N, N, B, N); 
-    image NNBB = construitComposeeNS(N, N, B, B); 
-    image BBNN = construitComposeeNS(B, B, N, N); 
-    image BBNB = construitComposeeNS(B, B, N, B); 
-    image BBBN = construitComposeeNS(B, B, B, N); 
-    image BBBB = construitComposeeNS(B, B, B, B); 
-    image BNNN = construitComposeeNS(B, N, N, N); 
-    image BNNB = construitComposeeNS(B, N, N, B); 
-    image BNBN = construitComposeeNS(B, N, B, N); 
-    image BNBB = construitComposeeNS(B, N, B, B); 
+    image NBNN = construitComposee(N, B, N, N); 
+    image NBNB = construitComposee(N, B, N, B); 
+    image NBBN = construitComposee(N, B, B, N); 
+    image NBBB = construitComposee(N, B, B, B); 
+    image NNNN = construitComposee(N, N, N, N); 
+    image NNNB = construitComposee(N, N, N, B); 
+    image NNBN = construitComposee(N, N, B, N); 
+    image NNBB = construitComposee(N, N, B, B); 
+    image BBNN = construitComposee(B, B, N, N); 
+    image BBNB = construitComposee(B, B, N, B); 
+    image BBBN = construitComposee(B, B, B, N); 
+    image BBBB = construitComposee(B, B, B, B); 
+    image BNNN = construitComposee(B, N, N, N); 
+    image BNNB = construitComposee(B, N, N, B); 
+    image BNBN = construitComposee(B, N, B, N); 
+    image BNBB = construitComposee(B, N, B, B); 
 
     image imgB = construitComposee(B, B, B, B);
     image imc1 = construitComposee(NNBN,BBNB,BBBN,NBNB);
@@ -590,10 +619,10 @@ int main(int argc, char const *argv[])
     image im = construitComposee(construitComposee(imc1,imc2,NBNN,imgB),imc1,BNNN,N);
 
     // image NON simplifies : 
-    image imgBNS = construitComposeeNS(B, B, B, B); 
-    image imgNNS = construitComposeeNS(N, N, N, N); 
-    image imgBN2NS = construitComposeeNS(imgBNS,imgBNS,imgBNS,imgBNS);
-    image imgNN2NS = construitComposeeNS(imgNNS,imgNNS,imgNNS,imgNNS);
+    image imgBNS = construitComposee(B, B, B, B); 
+    image imgNNS = construitComposee(N, N, N, N); 
+    image imgBN2NS = construitComposee(imgBNS,imgBNS,imgBNS,imgBNS);
+    image imgNN2NS = construitComposee(imgNNS,imgNNS,imgNNS,imgNNS);
     
     
 
@@ -601,16 +630,13 @@ int main(int argc, char const *argv[])
     
             // void afficheNormalRL(image im);
     printf("\n\n//Test:  void afficheNormalRL(image im);-\n");
-    printBool(estNoireBF(B));
+    printBool(estNoire(B));
     printnl();
     afficheNormalRL(NBNN);
     afficheNormalRL(im);
 
     // image construitComposee( image i0, image i1, image i2, image i3);
     printf("\n\n//Test:  image construitComposee( image i0, image i1, image i2, image i3); est composeNonSimplifie-\n");
-    printf("construiteBienForme: construire(BBBB) doit etre construite en B :: simplification est faite en construction\n");
-    afficheNormalRL(imgB);
-    printf("construiteNonForme: construire(BBBB) doit etre construite en BBBB :: simplification est faite en construction\n");
     afficheNormalRL(imgBNS);
     afficheNormalRL(imgNN2NS);
 
@@ -629,43 +655,53 @@ int main(int argc, char const *argv[])
     
             // bool estBlanche(image im);
     printf("\n\n//Test:  bool estBlanche(image im);-\n");
+    afficheNormalRL(imgBN2NS);
     printBool(estBlanche(imgBN2NS));printnl();
+    afficheNormalRL(im);
     printBool(estBlanche(im));printnl();
+    afficheNormalRL(B);
     printBool(estBlanche(B));printnl();
    
     
     
             // bool estNoire(image im);
     printf("\n\n//Test:  bool estNoire(image im);-\n");
+    afficheNormalRL(imgNN2NS);
     printBool(estNoire(imgNN2NS));printnl();
+    afficheNormalRL(im);
     printBool(estNoire(im));printnl();
+    afficheNormalRL(N);
     printBool(estNoire(N));printnl();
     
     
-            // bool estBlancheBF(image im);
-    printf("\n\n//Test:  bool estBlancheBF(image im);-\n");
-    printBool(estBlancheBF(imgBN2NS));printnl(); // ca marche pour les bien formee 
-    printBool(estBlancheBF(im));printnl();
-    printBool(estBlancheBF(B));printnl();
-    
-    
-            // bool estNoireBF(image im);
-    printf("\n\n//Test:  bool estNoireBF(image im);-\n");
-    printBool(estNoireBF(imgNN2NS));printnl(); // ca marche pour les bien formee 
-    printBool(estNoireBF(im));printnl();
-    printBool(estNoireBF(N));printnl();
     
     
             // bool filsNoir(image im);
     printf("\n\n//Test:  bool filsNoir(image im);-\n");
+    afficheNormalRL(imgNNS);
     printBool(filsNoir(imgNNS));printnl();
+    afficheNormalRL(imgNN2NS);
     printBool(filsNoir(imgNN2NS));printnl();
+    afficheNormalRL(cc(B,B,B,B));
+    printBool(filsNoir(cc(B,B,B,B)));printnl();
+    afficheNormalRL(cc(N,N,N,N));
+    printBool(filsNoir(cc(N,N,N,N)));printnl();
+    afficheNormalRL(cc(B,B,N,B));
+    printBool(filsNoir(cc(B,B,N,B)));printnl();
     
     
             // bool filsBlanc(image im);
     printf("\n\n//Test:  bool filsBlanc(image im);-\n");
+    afficheNormalRL(imgBNS);
     printBool(filsBlanc(imgBNS));printnl();
-    printBool(filsNoir(imgBN2NS));printnl();
+    afficheNormalRL(imgBN2NS);
+    printBool(filsBlanc(imgBN2NS));printnl();
+    afficheNormalRL(cc(B,B,B,B));
+    printBool(filsBlanc(cc(B,B,B,B)));printnl();
+    afficheNormalRL(cc(N,N,N,N));
+    printBool(filsBlanc(cc(N,N,N,N)));printnl();
+    afficheNormalRL(cc(B,B,N,B));
+    printBool(filsBlanc(cc(B,B,N,B)));printnl();
     
     
             // image diagonale(int p) ;
@@ -689,10 +725,10 @@ int main(int argc, char const *argv[])
     
             // void SimplifieProfP(image *img,int p);
     printf("\n\n//Test:  void SimplifieProfP(image *img,int p);-\n");
-    image imspp = cn(N,
-                     cn(N,B,cn(N,N,cn(N,N,N,N),N),B),
-                     cn(N,B,N,cn(N,B,N,cn(B,B,B,B))),
-                     cn(B,B,cn(B,B,B,B),B));
+    image imspp = cc(N,
+                     cc(N,B,cc(N,N,cc(N,N,N,N),N),B),
+                     cc(N,B,N,cc(N,B,N,cc(B,B,B,B))),
+                     cc(B,B,cc(B,B,B,B),B));
     afficheNormalRL(imspp);
     SimplifieProfP(&imspp, 2);
     afficheNormalRL(imspp);
@@ -702,8 +738,8 @@ int main(int argc, char const *argv[])
     
             // void detruire(image* im); 
     printf("\n\n//Test:  void detruire(image* im);-\n");
-    image nnnn = cn(N,N,N,N);
-    image bbbb = cn(B,B,B,B);  
+    image nnnn = cc(N,N,N,N);
+    image bbbb = cc(B,B,B,B);  
     afficheNormalRL(bbbb);
     detruire(bbbb);
     printBool(bbbb==NULL);
@@ -752,14 +788,14 @@ int main(int argc, char const *argv[])
 
     printf("%d \n",hautMaxBlanc( B));
     printf("%d \n",hautMaxBlanc(BBBB));
-    printf("%d \n",hautMaxBlanc(cn(B,B,B,BBBB)));
-    printf("%d \n",hautMaxBlanc(cn(B,B,BBBB,cn(B,B,B,BBBB))));
+    printf("%d \n",hautMaxBlanc(cc(B,B,B,BBBB)));
+    printf("%d \n",hautMaxBlanc(cc(B,B,BBBB,cc(B,B,B,BBBB))));
     printf("%d \n",hautMaxBlanc( N));
     printf("%d \n",hautMaxBlanc( NNNN));
-    image imhmb = cn(cn(B,B,B,B),
+    image imhmb = cc(cc(B,B,B,B),
                      N,
-                     cn(B,N,B,N),
-                     cn(N,B,N,cn(N,B,cn(B,B,cn(B,B,B,B),cn(B,B,B,cn(B,B,B,B))),N)));
+                     cc(B,N,B,N),
+                     cc(N,B,N,cc(N,B,cc(B,B,cc(B,B,B,B),cc(B,B,B,cc(B,B,B,B))),N)));
     afficheNormal(imhmb);printnl();
     printf("%d \n",hautMaxBlanc(imhmb));printnl();
     printBool(estNoire(BBBB));
@@ -775,17 +811,124 @@ int main(int argc, char const *argv[])
     
             // void blanchitProfP(image* im, int p, int x, int y); // todo : cas1 
     printf("\n\n//Test:  void blanchitProfP(image* im, int p, int x, int y);-\n");
-    image bpp = cn(cn(N,cn(N,B,N,N),N,N),B,N,B); 
+    image bpp = cc(cc(N,cc(N,B,N,N),N,N),B,N,B); 
+    afficheNormalRL(bpp);
     blanchitProfP(&bpp,2,1,3); 
     afficheNormalRL(bpp); 
-    bpp = cn(cn(N,B,N,N),B,N,B); 
+    bpp = cc(cc(N,B,N,N),B,N,B); 
+    afficheNormalRL(bpp);
     blanchitProfP(&bpp,2,1,3); 
     afficheNormalRL(bpp); 
+
+    
+    printf("\n -- \n");
+    image bl = construitBlanc();
+
+    afficheNormalRL(bl);
+    blanchitProfP(&bl,0,0,0); 
+    afficheNormalRL(bl); 
+
+    
+    bl = construitBlanc();
+    blanchitProfP(&bl,1,0,1); 
+    afficheNormalRL(bl); 
+
+    
+    bl = construitBlanc();
+    blanchitProfP(&bl,2,1,3); 
+    afficheNormalRL(bl); 
+
+    
+    printf("\n -- \n");    
+    image noir = construitNoir();
+
+    afficheNormalRL(noir);
+    blanchitProfP(&noir,0,0,0); 
+    afficheNormalRL(noir); 
+
+    
+    noir = construitNoir();
+    blanchitProfP(&noir,1,0,1); 
+    afficheNormalRL(noir); 
+
+    
+    noir = construitNoir();
+    blanchitProfP(&noir,2,1,3); 
+    afficheNormalRL(noir); 
+
+    printf("\n -- \n");
+    image bbbb2 = cc(b(),b(),b(),b());
+
+    afficheNormalRL(bbbb2);
+    blanchitProfP(&bbbb2,0,0,0); 
+    afficheNormalRL(bbbb2); 
+
+    
+    bbbb2 = cc(b(),b(),b(),b());
+    blanchitProfP(&bbbb2,1,0,1); 
+    afficheNormalRL(bbbb2); 
+
+    
+    bbbb2 = cc(b(),b(),b(),b());
+    blanchitProfP(&bbbb2,2,1,3); 
+    afficheNormalRL(bbbb2); 
+
+    printf("\n -- \n");
+    image nnnn2 = cc(n(),n(),n(),n());
+
+    afficheNormalRL(nnnn2);
+    blanchitProfP(&nnnn2,0,0,0); 
+    afficheNormalRL(nnnn2); 
+
+    
+    nnnn2 = cc(n(),n(),n(),n());
+    blanchitProfP(&nnnn2,1,0,1); 
+    afficheNormalRL(nnnn2); 
+
+    
+    nnnn2 = cc(n(),n(),n(),n());
+    blanchitProfP(&nnnn2,2,1,3); 
+    afficheNormalRL(nnnn2); 
+
+    printf("\n -- \n");
+    image bnnn = cc(b(),n(),n(),n());
+
+    afficheNormalRL(bnnn);
+    blanchitProfP(&bnnn,0,0,0); 
+    afficheNormalRL(bnnn); 
+
+    
+    bnnn = cc(b(),n(),n(),n());
+    blanchitProfP(&bnnn,1,0,1); 
+    afficheNormalRL(bnnn); 
+
+    
+    bnnn = cc(b(),n(),n(),n());
+    blanchitProfP(&bnnn,2,1,3); 
+    afficheNormalRL(bnnn); 
+
+    printf("\n -- \n");
+    image NbnbnBN = cc(n(),cc(b(),n(),b(),n()),b(),n());
+
+    afficheNormalRL(NbnbnBN);
+    blanchitProfP(&NbnbnBN,0,0,0); 
+    afficheNormalRL(NbnbnBN); 
+
+    
+    NbnbnBN = cc(n(),cc(b(),n(),b(),n()),b(),n());
+    blanchitProfP(&NbnbnBN,1,0,1); 
+    afficheNormalRL(NbnbnBN); 
+
+    
+    NbnbnBN = cc(n(),cc(b(),n(),b(),n()),b(),n());
+    blanchitProfP(&NbnbnBN,2,1,3); 
+    afficheNormalRL(NbnbnBN); 
+
     
     
             // image chute(image im) ; // todo:: avec imch 
     printf("\n\n//Test:  image chute(image im) ;-\n");
-    image imch = cn(N,cn((NBNN),N,B,(BNBN)),cn(N,(NBBN),(BNNN),NBNB),cn(N,N,NBBB,BNBN));
+    image imch = cc(N,cc((NBNN),N,B,(BNBN)),cc(N,(NBBN),(BNNN),NBNB),cc(N,N,NBBB,BNBN));
     afficheNormalRL(imch);
     printf("chute\n");
     // afficheNormalRL(chute(imch));
@@ -797,7 +940,7 @@ int main(int argc, char const *argv[])
     afficheNormalRL(chute(imch)); 
 
     printf("autre exemple\n");
-    imch = cn(B,BBBB,BBBB,cn(BBBB,B,B,B));
+    imch = cc(B,BBBB,BBBB,cc(BBBB,B,B,B));
     afficheNormalRL(imch);
     printf("chute\n");
     afficheNormalRL(chute(imch));
@@ -809,7 +952,7 @@ int main(int argc, char const *argv[])
     afficheNormalRL(chute(imch));
 
     printf("autre exemple\n");
-    imch = cn(N,NNNN,NNNN,cn(NNNN,N,N,N));
+    imch = cc(N,NNNN,NNNN,cc(NNNN,N,N,N));
     afficheNormalRL(imch);
     printf("chute\n");
     afficheNormalRL(chute(imch));
@@ -817,7 +960,7 @@ int main(int argc, char const *argv[])
     
             // image unionNoir(image im1, image im2); // toFix: keep same prof 
     printf("\n\n//Test:  image unionNoir(image im1, image im2);-\n");
-    afficheNormalRL(unionNoir(cn(N,B,BBNN,BBNN),cn(N,B,NBNB,BBNN)));
+    afficheNormalRL(unionNoir(cc(N,B,BBNN,BBNN),cc(N,B,NBNB,BBNN)));
     afficheNormalRL(NNNN);
     afficheNormalRL(unionNoir(N,NNNN));
     afficheNormalRL(unionNoir(N,N));

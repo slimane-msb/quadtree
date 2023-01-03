@@ -105,7 +105,7 @@ image diagonale(int p) ;
 image quartDeTour( image im) ;
 void Negatif(image *img);
 void SimplifieProfP(image *img,int p);
-void detruire(image im);
+void detruire(image* im);
 
 bool incluse(image im1, image im2);
 bool incluseComposee( image im1, image im2);
@@ -154,22 +154,6 @@ image construitComposee( image i0, image i1, image i2, image i3){
 }
 
 
-// %% to remove 
-// image construitComposee( image i0, image i1, image i2, image i3){ // %%% maybe put in comment on work on the right principle and have one function for everything 
-//     if (((i0)==NULL)&&((i1)==NULL)&&((i2)==NULL)&&((i3)==NULL)) 
-//         return construitBlanc();
-//     // else 
-//     if ((estNoire(i0))&&(estNoire(i1))&&(estNoire(i2))&&(estNoire(i3))) 
-//         return construitNoir();
-//     // else 
-//     image img =  (image) malloc(sizeof(bloc_image));
-//     img->toutnoir = FALSE; 
-//     (img->fils)[0] = i0 ; 
-//     (img->fils)[1] = i1 ; 
-//     (img->fils)[2] = i2 ; 
-//     (img->fils)[3] = i3 ; 
-//     return img; 
-// }
 
 
 
@@ -243,7 +227,7 @@ image lecture(char*s){
 
 // specification: chaine bien formee : 
 image lecture_aux(char* s, int* cur){
-    *cur+=1 ; // get char : //%%% start with 0 and increase cursor at the end of lecture aux code 
+    *cur+=1 ; 
     if (s[*cur] == 'B'){
         return construitBlanc();
     }
@@ -332,7 +316,7 @@ void Negatif(image *img){
         (*img) = construitNoir();
     }
     else if ((*img)->toutnoir ){
-        // detruire(*img);  // %%% to fix 
+        detruire(img);  
         (*img) = construitBlanc();
     }
     else
@@ -352,12 +336,12 @@ void Negatif(image *img){
 void SimplifieProfP(image *img,int p){
     if (p == 0){
         if (estBlanche(*img)){
-            detruire(*img);
+            detruire(img);
             *img = construitBlanc();
         }
 
         else if (estNoire(*img)){
-            // detruire(*img); // %%% make work without sig fault  
+            detruire(img); 
             *img = construitNoir();
         }
     }
@@ -375,12 +359,12 @@ void SimplifieProfP(image *img,int p){
 
 
 
-void detruire(bloc_image* im){
-    if((im) !=NULL){
+void detruire(image* im){
+    if((*im) !=NULL){
         for (int i=0 ; i<4; i++) 
-            detruire((im->fils[i])); 
-        free(im); 
-        im = NULL; 
+            detruire(&((*im)->fils[i])); 
+        free(*im); 
+        *im = NULL; 
     }
 }
 
@@ -414,7 +398,7 @@ int hautMaxBlanc( image im) {
     hautMaxBlancAux(im, &blanche);
 }
 
-int hautMaxBlancAux( image im, bool* blanche ){  //%%% optimise 
+int hautMaxBlancAux( image im, bool* blanche ){  
     if (im==NULL) return 0; 
     // else soit noir ou composee 
     if (estNoire(im)) {
@@ -453,12 +437,12 @@ int max2(int n, int m){
 void blanchitProfPCase(image* im, int p, int x, int y, double taille ){
     if(*im == NULL) return; // deja bon ( car image blanche ) 
     if (p==0) { 
-        detruire( *im);
+        detruire( im);
         *im = NULL; 
     }
     else if (p>0) {
         if ((*im)->toutnoir){
-            // detruire(*im); %% uncomment une fois detruire est reglee 
+             detruire(im); 
             *im = construitComposee(construitNoir(),construitNoir(),construitNoir(),construitNoir());
         }
         // cas blanche deja teste'
@@ -488,7 +472,7 @@ void blanchitProfPCase(image* im, int p, int x, int y, double taille ){
 void blanchitProfP(image* im, int p, int x, int y){
     double taille = pow((double)2,(double)p); // %%% gcc q.c -lm 
     printf("%f\n",taille);
-    blanchitProfPCase(im, p, x, y, taille); // 0-> taille 
+    blanchitProfPCase(im, p, x, y, taille); 
 }
 
 
@@ -686,20 +670,32 @@ int main(int argc, char const *argv[])
     afficheNormalRL(quartDeTour(imqd));
 
                 //  void Negatif(image *img);
-    printf("\n\n//Test:   void Negatif(image *img);-\n");
-    afficheNormalRL(imqd);
-    Negatif(&imqd);
-    afficheNormalRL((imqd));
 
-    void Negatif(image *img);
-    
+
+    printf("\n\n//Test:   void Negatif(image *img);-\n");
+
+    image negB = b();
+    afficheNormalRL(negB);
+    Negatif(&negB);
+    afficheNormalRL((negB));
+
+    image negN = n();
+    afficheNormalRL(negN);
+    Negatif(&negN);
+    afficheNormalRL((negN));
+
+    image negcc = cc(cc(b(),n(),n(),n()),b(),cc(n(),n(),b(),b()),n());
+    afficheNormalRL(negcc);
+    Negatif(&negcc);
+    afficheNormalRL((negcc));
+   
     
             // void SimplifieProfP(image *img,int p);
     printf("\n\n//Test:  void SimplifieProfP(image *img,int p);-\n");
-    image imspp = cc(N,
-                     cc(N,B,cc(N,N,cc(N,N,N,N),N),B),
-                     cc(N,B,N,cc(N,B,N,cc(B,B,B,B))),
-                     cc(B,B,cc(B,B,B,B),B));
+    image imspp = cc(n(),
+                     cc(n(),b(),cc(n(),n(),cc(n(),n(),n(),n()),n()),b()),
+                     cc(n(),b(),n(),cc(n(),b(),n(),cc(b(),b(),b(),b()))),
+                     cc(b(),b(),cc(b(),b(),b(),b()),b()));
     afficheNormalRL(imspp);
     SimplifieProfP(&imspp, 2);
     afficheNormalRL(imspp);
@@ -709,11 +705,30 @@ int main(int argc, char const *argv[])
     
             // void detruire(image* im); 
     printf("\n\n//Test:  void detruire(image* im);-\n");
-    image nnnn = cc(N,N,N,N);
-    image bbbb = cc(B,B,B,B);  
-    afficheNormalRL(bbbb);
-    detruire(bbbb);
-    printBool(bbbb==NULL);
+    image nnnn5 = cc(n(),n(),n(),n());
+    image bbbb5 = cc(b(),b(),b(),b());  
+    afficheNormalRL(bbbb5);
+    detruire(&bbbb5);
+    printBool(bbbb5==NULL);
+
+    afficheNormalRL(nnnn5);
+    detruire(&nnnn5);
+    printBool(nnnn5==NULL);
+
+    image db = b();
+    afficheNormalRL(db);
+    detruire(&db);
+    printBool(db==NULL);
+
+    image dn =n();
+    afficheNormalRL(dn);
+    detruire(&dn);
+    printBool(dn==NULL);
+
+    image dbnnb =cc(b(),n(),n(),b());
+    afficheNormalRL(dbnnb);
+    detruire(&dbnnb);
+    printBool(dbnnb==NULL);
     
     
             // bool incluse(image im1, image im2);
@@ -954,6 +969,9 @@ int main(int argc, char const *argv[])
     // printf("\n\n//Test:  image Lecture(); -\n");
     // image iml = Lecture(); 
     // afficheNormalRL(iml);
+
+
+    printf("\ntest success\n");
 
 
 

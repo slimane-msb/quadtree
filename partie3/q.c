@@ -493,21 +493,28 @@ void blanchitProfP(image* im, int p, int x, int y){
 
 
 image chute(image im) {
-    if (estBlanche(im)) 
-        return im;
-    if(estNoire(im)) 
-        return construitComposee(construitBlanc(),construitBlanc(),im->fils[2], im->fils[3]) ; 
-    image bg, bd; 
-    bg = unionNoir(chute(im->fils[0]),chute(im->fils[3])); 
-    bd = unionNoir(chute(im->fils[2]),chute(im->fils[4])); 
-    return construitComposee(construitBlanc(), construitBlanc(), bg,  bd) ; 
+    if (estBlanche(im) || im->toutnoir)
+        return im; 
+    image bg = unionNoir((im->fils[0]),(im->fils[2])); 
+    image bd = unionNoir((im->fils[1]),(im->fils[3])); 
+    return construitComposee(construitBlanc(), construitBlanc(), chute(bg),  chute(bd)) ; 
 }
 
+/*
+
+traitement des cas : 
+    B   N   C
+B   B   N   C         
+N   N   N   N
+C   C   N   C
+
+*/
 image unionNoir(image im1, image im2){
     if((im1)==NULL) return im2;
-    if (estNoire(im1)) return im1; 
-    // else composee 
-    if (estBlanche(im2)) return im1; 
+    if (im2==NULL) return im1; 
+    // cas im1!=NULL et im2 != NULL: 
+    if (im1->toutnoir ) return im1; 
+    if (im2->toutnoir) return im2 ; 
     return construitComposee(unionNoir(im1->fils[0], im2->fils[0]), 
                              unionNoir(im1->fils[1], im2->fils[1]), 
                              unionNoir(im1->fils[2], im2->fils[2]), 
@@ -899,47 +906,52 @@ int main(int argc, char const *argv[])
     
             // image chute(image im) ; // todo:: avec imch 
     printf("\n\n//Test:  image chute(image im) ;-\n");
-    image imch = cc(N,cc((NBNN),N,B,(BNBN)),cc(N,(NBBN),(BNNN),NBNB),cc(N,N,NBBB,BNBN));
-    afficheNormalRL(imch);
-    printf("chute\n");
-    // afficheNormalRL(chute(imch));
 
-    printf("autre exemple\n");
-    imch = BBBB;
-    afficheNormalRL(imch);
-    printf("chute\n");
-    afficheNormalRL(chute(imch)); 
+    printf("\n -- \n");
+    afficheNormalRL(n());
+    afficheNormalRL(chute(n()));
+    
+    printf("\n -- \n");
+    afficheNormalRL(b());
+    afficheNormalRL(chute(b()));
 
-    printf("autre exemple\n");
-    imch = cc(B,BBBB,BBBB,cc(BBBB,B,B,B));
-    afficheNormalRL(imch);
-    printf("chute\n");
-    afficheNormalRL(chute(imch));
-    
-    printf("autre exemple\n");
-    imch = NNNN;
-    afficheNormalRL(imch);
-    printf("chute\n");
-    afficheNormalRL(chute(imch));
+    printf("\n -- \n");
+    afficheNormalRL(cc(n(),b(),b(),b()));
+    afficheNormalRL(chute(cc(n(),b(),b(),b())));
 
-    printf("autre exemple\n");
-    imch = cc(N,NNNN,NNNN,cc(NNNN,N,N,N));
-    afficheNormalRL(imch);
-    printf("chute\n");
-    afficheNormalRL(chute(imch));
-    
-    
-            // image unionNoir(image im1, image im2); // toFix: keep same prof 
-    printf("\n\n//Test:  image unionNoir(image im1, image im2);-\n");
-    afficheNormalRL(unionNoir(cc(N,B,BBNN,BBNN),cc(N,B,NBNB,BBNN)));
-    afficheNormalRL(NNNN);
-    afficheNormalRL(unionNoir(N,NNNN));
-    afficheNormalRL(unionNoir(N,N));
+    printf("\n -- \n");
+    afficheNormalRL(cc(n(),b(),n(),b()));
+    afficheNormalRL(chute(cc(n(),b(),n(),b())));
+
+    printf("\n -- \n");
+    afficheNormalRL(cc(n(),b(),cc(b(),n(),b(),b()),b()));
+    afficheNormalRL(chute(cc(n(),b(),cc(b(),n(),b(),b()),b())));
+
+    printf("\n -- \n");
+    afficheNormalRL(cc(n(),n(),n(),n()));
+    afficheNormalRL(chute(cc(n(),n(),n(),n())));
+
+    printf("\n -- \n");
+    afficheNormalRL(cc(cc(n(),n(),n(),n()),n(),n(),n()));
+    afficheNormalRL(chute(cc(cc(n(),n(),n(),n()),n(),n(),n())));
+
+    printf("\n -- \n");
+    afficheNormalRL(cc(cc(n(),n(),n(),n()),n(),cc(n(),n(),n(),n()),n()));
+    afficheNormalRL(chute(cc(cc(n(),n(),n(),n()),n(),cc(n(),n(),n(),n()),n())));
+
+    printf("\n -- \n");
+    afficheNormalRL(cc(n(),n(),cc(n(),n(),n(),n()),n()));
+    afficheNormalRL(chute(cc(n(),n(),cc(n(),n(),n(),n()),n())));
+
+    printf("\n -- \n");
+    afficheNormalRL(cc(n(),b(),n(),n()));
+    afficheNormalRL(chute(cc(n(),b(),n(),n())));
 
     
+   
     
                 // image Lecture();
-    printf("\n\n//Test:  image Lecture(); // uncommet to test -\n");
+    // printf("\n\n//Test:  image Lecture(); -\n");
     // image iml = Lecture(); 
     // afficheNormalRL(iml);
 

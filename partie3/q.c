@@ -364,27 +364,30 @@ void detruire(image* im){
 /*
 
 traitement de cas : 
-    im1    N    B      4
-    im2 
-    N      t    f      4=N
-    B      f    t       4=B 
-    4      4=N  4=B     im1, img2[0] || ...3|| in moitite 
+ 
+    B       N               C
+B   1       0               estBlanche(C)         
+N   1       1               1
+C   1       estNoire(C)     C
 
-in moitie = 
-    todo 
 */
-bool incluse(image im1, image im2){  // %% a refaire entierement 
-    if (estBlanche(im2)) return estBlanche(im1);
-    if (estNoire(im2)) return estNoire(im1); 
-    // else im2 construite: 
-    return incluse(im1, im2->fils[0]) || incluse(im1, im2->fils[1]) || incluse(im1, im2->fils[2]) ||
-           incluse(im1, im2->fils[3]) || incluseComposee(im1,im2); 
+bool incluse(image im1, image im2){
+    if (im1==NULL) return TRUE; 
+    // cas im1 != NULL
+    if (im2==NULL) return estBlanche(im1) ;   
+    // cas im1 != NULL && im2 != NULL
+    if (im2->toutnoir) return TRUE; 
+    // cas im2 composee 
+    if (im1->toutnoir) return estNoire(im2);
+    // cas im1 et im2 composee: 
+    return  incluse(im1->fils[0], im2->fils[0]) &&
+            incluse(im1->fils[1], im2->fils[1]) &&
+            incluse(im1->fils[2], im2->fils[2]) &&
+            incluse(im1->fils[3], im2->fils[3]) ; 
 }
 
 
-bool incluseComposee( image im1, image im2){
-    return FALSE; // todo 
-}
+
 
 int hautMaxBlanc( image im) {
     bool blanche = TRUE; 
@@ -726,40 +729,78 @@ int main(int argc, char const *argv[])
     
             // bool incluse(image im1, image im2);
     printf("\n\n//Test:  bool incluse(image im1, image im2);-\n");
-    printf("exemple: \n");
-    image inc1 = B; 
-    image inc2 = N; 
-    printBool(incluse(inc1, inc2));
+    printf("\n\n -- \n");
+    printf(" assert true = ");
+    printBool(incluse(b(), b()));
 
-        printf("exemple: \n");
-    inc1 = B; 
-    inc2 = B; 
-    printBool(incluse(inc1, inc2));
+    printf("\n\n -- \n");
+    printf(" assert true = ");
+    printBool(incluse(b(), n()));
 
-        printf("exemple: \n");
-    inc1 = N; 
-    inc2 = N; 
-    printBool(incluse(inc1, inc2));
+    printf("\n\n -- \n");
+    printf(" assert true = ");
+    printBool(incluse(b(), cc(n(),b(),b(),n())));
 
-        printf("exemple: \n");
-    inc1 = N; 
-    inc2 = B; 
-    printBool(incluse(inc1, inc2));
+    // c2: 
+    printf("\n\n -- \n");
+    printf(" assert false = ");
+    printBool(incluse(n(), b()));
 
-        printf("exemple: \n");
-    inc1 = B; 
-    inc2 = BBBB; 
-    printBool(incluse(inc1, inc2));
+    printf("\n\n -- \n");
+    printf(" assert true = ");
+    printBool(incluse(n(), n()));
 
-        printf("exemple: \n");
-    inc1 = N; 
-    inc2 = NNNN; 
-    printBool(incluse(inc1, inc2));
+    printf("\n\n -- \n");
+    printf(" assert true = ");
+    printBool(incluse(n(), cc(n(),n(),n(),cc(n(),n(),n(),n()))));
 
-            printf("exemple: \n");
-    inc1 = N; 
-    inc2 = BBNB; 
-    printBool(incluse(inc1, inc2));
+    printf("\n\n -- \n");
+    printf(" assert false = ");
+    printBool(incluse(n(), cc(n(),n(),n(),cc(n(),n(),n(),b()))));
+
+    // c3: 
+
+    printf("\n\n -- \n");
+    printf(" assert false = ");
+    printBool(incluse(cc(b(),b(),b(),cc(b(),b(),n(),b())), b()));
+
+    printf(" assert true = ");
+    printBool(incluse(cc(b(),b(),b(),cc(b(),b(),b(),b())), b()));
+
+    printf("\n\n -- \n");
+    printf(" assert true = ");
+    printBool(incluse(cc(b(),b(),b(),cc(b(),b(),n(),b())), n()));
+
+    printf("\n\n -- \n");
+    printf(" assert false = ");
+    image incImg1 = (cc(   cc(cc(b(),b(),b(),b()),n(),b(),n()),
+                            b(),
+                            n(),
+                            cc(cc(b(),b(),n(),n()),b(),b(),cc(n(),b(),b(),n()))    )); 
+
+    image incImg2 = (cc(    cc(b(),n(),n(),n()),
+                            cc(b(),b(),n(),b()),
+                            cc(n(),n(),n(),n()),
+                            cc(n(),b(),n(),cc(n(),n(),n(),b()))    )); 
+                            
+    printBool(incluse(incImg1, incImg2));
+
+    printf("\n\n -- \n");
+    printf(" assert true = ");
+    image incImg11 = (cc(   cc(cc(b(),b(),b(),b()),n(),b(),n()),
+                            b(),
+                            n(),
+                            cc(cc(b(),b(),n(),n()),b(),b(),cc(n(),b(),b(),n()))    )); 
+
+    image incImg22 = (cc(    cc(b(),n(),n(),n()),
+                            cc(b(),b(),n(),b()),
+                            cc(n(),n(),n(),n()),
+                            cc(n(),b(),n(),cc(n(),n(),n(),n()))    ));  
+                            
+    printBool(incluse(incImg11, incImg22));
+
+
+
 
     
             // int hautMaxBlanc( image im) ;

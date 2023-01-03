@@ -50,9 +50,6 @@ void printBool( bool b){
 
 
 
-
-
-
 /*************************************************/
 /*                                               */
 /*          definition type liste                */
@@ -66,7 +63,6 @@ typedef struct  bloc_image
 }bloc_image;
 
 typedef bloc_image* image; 
-
 
 
 
@@ -120,6 +116,7 @@ image unionNoir(image im1, image im2);
 /*                fonctionnes                    */
 /*                                               */
 /*************************************************/
+
 image construitBlanc(){
     return NULL ; 
 }
@@ -145,12 +142,6 @@ image construitComposee( image i0, image i1, image i2, image i3){
     img->fils[3] = i3;
     return img;
 }
-
-
-
-
-
-
 
 
 
@@ -218,7 +209,7 @@ image lecture(char*s){
 }
 
 
-// specification: chaine bien formee : 
+
 image lecture_aux(char* s, int* cur){
     *cur+=1 ; 
     if (s[*cur] == 'B'){
@@ -242,15 +233,6 @@ image lecture_aux(char* s, int* cur){
 
 
 
-
-
-
-
-
-
-
-
-// Non Formee : 
 bool estBlanche(image im){
     if(im==NULL) return TRUE; 
     else if (im->toutnoir) return FALSE; 
@@ -266,21 +248,17 @@ bool estNoire(image im){
 }
 
 
-// prend une image composee est rend vrai si tout les fils sont noirs 
+// prend une image composee est rend vrai si tous les fils sont noirs 
 bool filsNoir(image im){
     return estNoire(im->fils[0]) && estNoire(im->fils[1]) && 
            estNoire(im->fils[2]) && estNoire(im->fils[3]) ; 
 }
 
-// prend une image composee est rend vrai si tout les fils sont blancs  
+// prend une image composee est rend vrai si tous les fils sont blancs  
 bool filsBlanc(image im){
     return estBlanche(im->fils[0]) && estBlanche(im->fils[1]) && 
            estBlanche(im->fils[2]) && estBlanche(im->fils[3]) ; 
 }
-
-
-
-
 
 
 
@@ -322,9 +300,6 @@ void Negatif(image *img){
 }
 
 
-// im NF: 
-
-
 
 void SimplifieProfP(image *img,int p){
     if (p == 0){
@@ -360,6 +335,7 @@ void detruire(image* im){
         *im = NULL; 
     }
 }
+
 
 /*
 
@@ -427,9 +403,6 @@ int max2(int n, int m){
 }
 
 
-
-
-
 void blanchitProfPCase(image* im, int p, int x, int y, double taille ){
     if(*im == NULL) return; // deja bonne ( car image blanche ) 
     if (p==0) { 
@@ -461,7 +434,6 @@ void blanchitProfPCase(image* im, int p, int x, int y, double taille ){
         blanchitProfPCase(&((*im)->fils[fils]), p-1, x, y, newTaille); 
     }
 }
-
 
 
 
@@ -504,9 +476,6 @@ image unionNoir(image im1, image im2){
 
 
 
-
-
-
 /*************************************************/
 /*                                               */
 /*           test gen                            */
@@ -529,7 +498,6 @@ image b(){
 image n(){
     return construitNoir(); 
 }
-
 
 
 
@@ -576,9 +544,6 @@ int main(int argc, char const *argv[])
     image imgNN2NS = construitComposee(imgNNS,imgNNS,imgNNS,imgNNS);
     
     
-
-    
-    
             // void afficheNormalRL(image im);
     printf("\n\n//Test:  void afficheNormalRL(image im);-\n");
     printBool(estNoire(B));
@@ -614,7 +579,6 @@ int main(int argc, char const *argv[])
     printBool(estBlanche(B));printnl();
    
     
-    
             // bool estNoire(image im);
     printf("\n\n//Test:  bool estNoire(image im);-\n");
     afficheNormalRL(imgNN2NS);
@@ -623,8 +587,6 @@ int main(int argc, char const *argv[])
     printBool(estNoire(im));printnl();
     afficheNormalRL(N);
     printBool(estNoire(N));printnl();
-    
-    
     
     
             // bool filsNoir(image im);
@@ -695,8 +657,6 @@ int main(int argc, char const *argv[])
     afficheNormalRL(imspp);
     SimplifieProfP(&imspp, 2);
     afficheNormalRL(imspp);
-
-
     
     
             // void detruire(image* im); 
@@ -800,9 +760,6 @@ int main(int argc, char const *argv[])
     printBool(incluse(incImg11, incImg22));
 
 
-
-
-    
             // int hautMaxBlanc( image im) ;
     printf("\n\n//Test:  int hautMaxBlanc( image im) ;-\n");
 
@@ -952,7 +909,6 @@ int main(int argc, char const *argv[])
     afficheNormalRL(NbnbnBN); 
 
     
-    
             // image chute(image im) ;  
     printf("\n\n//Test:  image chute(image im) ;-\n");
 
@@ -995,21 +951,13 @@ int main(int argc, char const *argv[])
     printf("\n -- \n");
     afficheNormalRL(cc(n(),b(),n(),n()));
     afficheNormalRL(chute(cc(n(),b(),n(),n())));
-
-    
-   
     
                 // image Lecture();
     // printf("\n\n//Test:  image Lecture(); -\n");
     // image iml = Lecture(); 
     // afficheNormalRL(iml);
 
-
     printf("\ntest success\n");
-
-
-
-
 
     return EXIT_SUCCESS;
 }

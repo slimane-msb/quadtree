@@ -11,20 +11,13 @@
 /*************************************************/
 
 /*
+
 Nassim ARIFETTE 
 Slimane MESBAH 
+
 */
 
 
-/*************************************************/
-/*                                               */
-/*                definition                     */
-/*                                               */
-/*************************************************/
-/*
-    bienForme: B ou N ou BNNB ..
-    MalForme ou NonSimplifie as (NS) : BBBB ou (BB(NNNN)B) ou (false,BBBB)                          
-*/
 
 /*************************************************/
 /*                                               */
@@ -435,7 +428,7 @@ int max2(int n, int m){
 
 
 void blanchitProfPCase(image* im, int p, int x, int y, double taille ){
-    if(*im == NULL) return; // deja bon ( car image blanche ) 
+    if(*im == NULL) return; // deja bonne ( car image blanche ) 
     if (p==0) { 
         detruire( im);
         *im = NULL; 
@@ -591,7 +584,7 @@ int main(int argc, char const *argv[])
     afficheNormalRL(im);
 
     // image construitComposee( image i0, image i1, image i2, image i3);
-    printf("\n\n//Test:  image construitComposee( image i0, image i1, image i2, image i3); est composeNonSimplifie-\n");
+    printf("\n\n//Test:  image construitComposee( image i0, image i1, image i2, image i3); -\n");
     afficheNormalRL(imgBNS);
     afficheNormalRL(imgNN2NS);
 
@@ -919,7 +912,7 @@ int main(int argc, char const *argv[])
 
     
     
-            // image chute(image im) ; // todo:: avec imch 
+            // image chute(image im) ;  
     printf("\n\n//Test:  image chute(image im) ;-\n");
 
     printf("\n -- \n");

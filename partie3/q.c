@@ -115,7 +115,7 @@ int hautMaxBlancAux( image im, bool* blanche );
 int max ( int a, int b, int c, int d);
 int max2(int n, int m);
 
-void blanchitProfPCase(image* im, int p, int x, int y, int taille );
+void blanchitProfPCase(image* im, int p, int x, int y, double taille );
 void blanchitProfP(image* im, int p, int x, int y);
 
 image chute(image im) ;
@@ -450,46 +450,7 @@ int max2(int n, int m){
 
 
 
-/*
-
-c correspond a fils[c ]
-
-
-*/
-
-void blanchitProfPCaseTry(image* im, int p, int x, int y, int taille ){
-    if(*im == NULL) return; // deja bon ( car image blanche ) 
-    if (p==0) { // il faut blanchir le fils[c] 
-        // cas blanche deja teste 
-        // else 
-        int fils ; 
-        if ((x==1) && (y==1 || y==0)) fils = y;
-        else if ((x==0) && (y==1 || y==0)) fils = y+3; 
-        else return; 
-        detruire( (*im)->fils[fils]);
-        // (*im)->fils[c] = NULL; // blanchir le fils c  :: ==NULL deja fait dans detruire 
-    }
-    if (p>0) {
-        // cas blanche deja teste 
-        int c; 
-        int l; 
-        int newTaille = taille/2; 
-        if (x<newTaille) c = 0 ; 
-        else c=1; 
-        if (y<newTaille) l = 0 ; 
-        else {
-            l=1;
-            y = y-newTaille; 
-        }
-        int fils ; 
-        if (l==1) fils = c; 
-        else fils = 3+c;  
-        blanchitProfPCaseTry(&((*im)->fils[fils]), p-1, x, y, newTaille); 
-    }
-}
-
-
-void blanchitProfPCase(image* im, int p, int x, int y, int taille ){
+void blanchitProfPCase(image* im, int p, int x, int y, double taille ){
     if(*im == NULL) return; // deja bon ( car image blanche ) 
     if (p==0) { 
         detruire( *im);
@@ -500,31 +461,34 @@ void blanchitProfPCase(image* im, int p, int x, int y, int taille ){
             // detruire(*im); %% uncomment une fois detruire est reglee 
             *im = construitComposee(construitNoir(),construitNoir(),construitNoir(),construitNoir());
         }
-        // cas blanche deja teste 
-        int c; 
-        int l; 
-        int newTaille = taille/2; 
-        if (x<newTaille) c = 0 ; 
+        // cas blanche deja teste'
+        int xc; 
+        int yc; 
+        double newTaille = taille/2; 
+        if (x<newTaille) xc = 0 ; 
         else {
-            c=1;
+            xc=1;
             x = x-newTaille;  
         }
-        if (y<newTaille) l = 0 ; 
+        if (y<newTaille) yc = 0 ; 
         else {
-            l=1;
+            yc=1;
             y = y-newTaille; 
         }
         int fils ; 
-        if (l==1) fils = c; 
-        else fils = 2+c;  
+        if (yc==1) fils = xc; 
+        else fils = 2+xc;  
         blanchitProfPCase(&((*im)->fils[fils]), p-1, x, y, newTaille); 
     }
 }
 
 
+
+
 void blanchitProfP(image* im, int p, int x, int y){
-    // int taille = (int)pow((double)2,(double)p); 
-    blanchitProfPCase(im, p, x, y, 0); // 0-> taille 
+    double taille = pow((double)2,(double)p); // %%% gcc q.c -lm 
+    printf("%f\n",taille);
+    blanchitProfPCase(im, p, x, y, taille); // 0-> taille 
 }
 
 
@@ -811,14 +775,21 @@ int main(int argc, char const *argv[])
     
             // void blanchitProfP(image* im, int p, int x, int y); // todo : cas1 
     printf("\n\n//Test:  void blanchitProfP(image* im, int p, int x, int y);-\n");
-    image bpp = cc(cc(N,cc(N,B,N,N),N,N),B,N,B); 
-    afficheNormalRL(bpp);
-    blanchitProfP(&bpp,2,1,3); 
-    afficheNormalRL(bpp); 
-    bpp = cc(cc(N,B,N,N),B,N,B); 
-    afficheNormalRL(bpp);
-    blanchitProfP(&bpp,2,1,3); 
-    afficheNormalRL(bpp); 
+    
+    image nbnb = cc(n(),b(),n(),b());
+    
+    afficheNormalRL(nbnb);
+    blanchitProfP(&nbnb,2,1,3); 
+    afficheNormalRL(nbnb); 
+
+    printf("\n -- \n");
+
+    image  nnbnnnnBNB = cc(cc(n(),cc(n(),b(),n(),n()),n(),n()),b(),n(),b());
+    
+    afficheNormalRL(nnbnnnnBNB);
+    blanchitProfP(&nnbnnnnBNB,2,1,3); 
+    afficheNormalRL(nnbnnnnBNB); 
+
 
     
     printf("\n -- \n");

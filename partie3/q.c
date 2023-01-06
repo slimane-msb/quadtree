@@ -416,21 +416,22 @@ void blanchitProfPCase(image* im, int p, int x, int y, double taille ){
         }
         // cas blanche deja teste'
         int xc; 
-        int yc; 
-        double newTaille = taille/2; 
-        if (x<newTaille) xc = 0 ; 
+        int yc;  
+        
+        if (x<taille) xc = 0 ; 
         else {
             xc=1;
-            x = x-newTaille;  
+            x = x-taille;  
         }
-        if (y<newTaille) yc = 0 ; 
+        if (y<taille) yc = 0 ; 
         else {
             yc=1;
-            y = y-newTaille; 
+            y = y-taille; 
         }
         int fils ; 
         if (yc==1) fils = xc; 
-        else fils = 2+xc;  
+        else fils = 2+xc; 
+        double newTaille = taille/2; 
         blanchitProfPCase(&((*im)->fils[fils]), p-1, x, y, newTaille); 
     }
 }
@@ -438,8 +439,8 @@ void blanchitProfPCase(image* im, int p, int x, int y, double taille ){
 
 
 void blanchitProfP(image* im, int p, int x, int y){
-    double taille = pow((double)2,(double)p); // %%% gcc q.c -lm 
-    printf("%f\n",taille);
+    double taille = 1 << (p-1) ; /* on commence par p-1 pour gangner un calcul de plus qui est 2^p et donc on commence par 2^(p-1) car on refait le calcul recursivement just avant l'appel recursive */
+    // double taille = pow((double)2,(double)(p-1)); // %%% gcc q.c -lm   ( utiliser le shift est plus optimise et necessite pas -lm )
     blanchitProfPCase(im, p, x, y, taille); 
 }
 
@@ -487,6 +488,8 @@ void printnl(){
     printf("\n");
 }
 
+
+/* renommage des fonctionnes pour la lisibilite des testes */
 image cc(image i1, image i2, image i3, image i4){
     return construitComposee(i1,i2,i3,i4); 
 }

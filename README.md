@@ -1,4 +1,4 @@
 # quadtree
 
 
-$$ \forall x \in s$$
+$$ C \ utility \ functions$$
